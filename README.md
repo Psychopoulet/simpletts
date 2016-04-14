@@ -24,7 +24,7 @@ const SimpleTTS = require('simpletts');
 
 SimpleTTS.getVoices().then(function(voices) {
 
-	console.log(voices);
+	console.log(voices); // depend of the TTS system used
 
 }).catch(function(err) {
 	console.log(err);
