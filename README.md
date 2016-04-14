@@ -16,7 +16,8 @@ $ npm install simpletss
 
 ```js
 
-const Simple
+const SimpleTTS = require('simpletts');
+
 ```
 
 ## Tests
