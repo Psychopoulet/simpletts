@@ -123,13 +123,15 @@
 
 		}
 
-		static read(text) {
+		static read(options) {
 			
 			return new Promise(function(resolve, reject) {
 
 				try {
 
-					let cmd = (_isWindows) ? path.join(_batchsPath, 'ptts.vbs') + ' -t "' + text + '"' : _espeakPath + ' -v fr+f5 -k 5 -s 150 -a 10 "' + text + '"';
+					options = ('string' === typeof options) ? { text: options } : options;
+
+					let cmd = (_isWindows) ? path.join(_batchsPath, 'ptts.vbs') + ' -t "' + options.text + '"' : _espeakPath + ' -v fr+f5 -k 5 -s 150 -a 10 "' + options.text + '"';
 
 					exec(cmd, function (err, stdout, stderr) {
 						
