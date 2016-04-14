@@ -1,12 +1,16 @@
 # simpletss
-A basic tss manager
-
+A basic tss manager, based on Microsoft Speech API or espeak for others OS
 
 ## Installation
 
 ```bash
 $ npm install simpletss
 ```
+
+## Note
+
+There is absolutly no option at this moment.
+Coming soon.
 
 ## Features
 
@@ -17,6 +21,24 @@ $ npm install simpletss
 ```js
 
 const SimpleTTS = require('simpletts');
+
+SimpleTTS.getVoices().then(function(voices) {
+
+	console.log(voices);
+
+}).catch(function(err) {
+	console.log(err);
+});
+
+SimpleTTS.read("ceci est un test").then(function() { // more options will be implemented soon
+
+	console.log('Ok');
+	
+}).catch(function(err) {
+
+	console.log(err);
+	
+});
 
 ```
 
