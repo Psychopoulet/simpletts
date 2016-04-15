@@ -1,6 +1,6 @@
 {
   "name": "simpletts",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A basic TTS manager",
   "main": "main.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "url": "git://github.com/Psychopoulet/simpletts.git"
   },
   "keywords": [
-    "tts"
+    "tts", "speech", "text", "text to speech", "text-to-speech"
   ],
   "author": "Sébastien VIDAL",
   "license": "ISC",
