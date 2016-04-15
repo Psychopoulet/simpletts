@@ -31,15 +31,11 @@ needText = False
 needFileName = False
 needRate = False
 needVolume = False
-needWord = False
-needPron = False
 needUnicodeFileName = False
 needSamples = False
 needChannels = False
 needVoice = False
 needEncoding = False
-doInstruct = False
-doLexiconAdd = False
 isCscript = True        ' Identifies if we are running CScript
 needDebugging = False
 
