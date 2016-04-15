@@ -116,20 +116,60 @@
 
 				try {
 
+					options = ('undefined' === typeof options) ? {} : options;
 					options = ('string' === typeof options) ? { text: options } : options;
 
-					exec((_isWindows) ?
-						_cscriptPath + ' "' + path.join(_batchsPath, 'playtext.vbs') + '"'  + ' "' + options.text + '"' :
-						_espeakPath + ' -v fr+f5 -k 5 -s 150 -a 10 "' + options.text + '"', function (err, stdout, stderr) {
+					if (!options.text || '' == options.text) {
+						reject('Missing text');
+					}
+					else {
 
-						if (err) {
-							reject(stderr);
+						let args = [];
+
+						options.volume = 100,
+						options.speed = 50,
+
+						options.volume = (!options.volume) ? 100 : parseInt(options.volume);
+							options.volume = (0 > options.volume) ? 0 : options.volume;
+							options.volume = (100 < options.volume) ? 100 : options.volume;
+
+						options.speed = (!options.speed) ? 10 : parseInt(options.speed);
+							options.speed = (0 > options.speed) ? 0 : options.speed;
+							options.speed = (100 < options.speed) ? 100 : options.speed;
+
+						if (_isWindows) {
+							args.push('-v', options.volume); // 0 -> 100
+							args.push('-r', (options.speed / 5) - 10); // -10 -> 10
 						}
 						else {
-							resolve();
+
+							args.push('-a', options.volume * 2); // 0 -> 200
+
+							/*options.speed = (16 > options.speed) ? 16 : options.speed; // 80 -> 500
+							args.push('-s', options.speed * 5);*/
+
 						}
 
+						args.push('"' + options.text + '"');
+
+						console.log((_isWindows) ?
+							_cscriptPath + ' "' + path.join(_batchsPath, 'playtext.vbs') + '" ' + args.join(' ') :
+							_espeakPath + ' -v fr+f5 -k 5 -s 160 ' + args.join(' '));
+
+						exec((_isWindows) ?
+							_cscriptPath + ' "' + path.join(_batchsPath, 'playtext.vbs') + '" ' + args.join(' ') :
+							_espeakPath + ' -v fr+f5 -k 5 -s 160 ' + args.join(' '), function (err, stdout, stderr) {
+
+							if (err) {
+								reject(stderr);
+							}
+							else {
+								resolve();
+							}
+
 					});
+
+					}
 
 				}
 				catch(e) {
