@@ -126,9 +126,6 @@
 
 						let args = [];
 
-						options.volume = 100,
-						options.speed = 50,
-
 						options.volume = (!options.volume) ? 100 : parseInt(options.volume);
 							options.volume = (0 > options.volume) ? 0 : options.volume;
 							options.volume = (100 < options.volume) ? 100 : options.volume;
