@@ -2,7 +2,7 @@
 
 ' vars
 
-pText = Null
+text = Null
 
 needRate = False
 rate = 0
@@ -54,14 +54,14 @@ For Each arg in WScript.Arguments
         needVoice = True
 
     Else
-        pText = Trim(arg)
+        text = Trim(arg)
     End If
 
 Next
 
 ' run
 
-If "" = pText Then
+If "" = text Then
     WScript.StdErr.WriteLine("Missing text")
     WScript.Quit (1)
 Else
@@ -103,7 +103,7 @@ Else
     ' play
 
     On Error Resume Next
-    hSpeaker.Speak pText, 3
+    hSpeaker.Speak text, 3
     Do
         Sleep 100
     Loop Until hSpeaker.WaitUntilDone(10)

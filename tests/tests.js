@@ -27,7 +27,7 @@
 					console.log("");
 					console.log("----------------");
 
-					resolve();
+					resolve(voices);
 
 				}).catch(function(err) {
 
@@ -50,7 +50,7 @@
 
 	}
 
-	function testRead() {
+	function testRead(voices) {
 
 		return new Promise(function(resolve, reject) {
 
@@ -64,17 +64,35 @@
 				console.log("----------------");
 				console.log("");
 
-				console.log("must be == 'Ok' :");
-					
-				SimpleTTS.read("ceci est un test").then(function() {
+				console.log("must be == 'Ok with options' :");
+				
+				SimpleTTS.read({text: "ceci est un test", voice: voices[0], speed: 70, volume: 30}).then(function() {
 
-					console.log('Ok');
-					
+					console.log('Ok with options');
+
 					console.log("");
-					console.log("----------------");
+					console.log("must be == 'Ok without options' :");
 
-					resolve();
+					SimpleTTS.read("ceci est un test").then(function() {
 
+						console.log('Ok without options');
+						
+						console.log("");
+						console.log("----------------");
+
+						resolve();
+
+					}).catch(function(err) {
+
+						console.log(err);
+						
+						console.log("");
+						console.log("----------------");
+
+						reject();
+
+					});
+					
 				}).catch(function(err) {
 
 					console.log(err);
@@ -100,6 +118,9 @@
 
 	try {
 
+		console.log("");
+		console.log("");
+		console.log(SimpleTTS.getTTSSystem());
 		console.log("");
 		console.log("");
 

@@ -11,13 +11,53 @@
 	// attributes
 
 		var _isWindows = (-1 < require('os').type().toLowerCase().indexOf('windows')),
+			_defaultVoice = null,
 			_cscriptPath = 'cscript //NoLogo //B',
 			_espeakPath = 'espeak',
 			_batchsPath = path.join(__dirname, 'batchs');
-		
+
+	// function
+
+		function _guessDefaultVoice() {
+
+			return new Promise(function(resolve, reject) {
+
+				try {
+
+					if (_defaultVoice) {
+						resolve();
+					}
+					else {
+
+						SimpleTTS.getVoices().then(function(voices) {
+
+							_defaultVoice = voices[0];
+							resolve();
+
+						}).catch(reject);
+
+					}
+
+				}
+				catch(e) {
+					reject((e.message) ? e.message : e);
+				}
+
+			});
+
+		}
+
 // module
 
-	module.exports = class SimpleTTS {
+	class SimpleTTS {
+
+		static setDefaultVoice(defaultVoice) {
+			_defaultVoice = defaultVoice;
+		}
+
+		static getTTSSystem() {
+			return (_isWindows) ? 'SAPI' : 'espeak';
+		}
 
 		static getVoices() {
 			
@@ -103,7 +143,7 @@
 
 				}
 				catch(e) {
-					reject(e);
+					reject((e.message) ? e.message : e);
 				}
 
 			});
@@ -116,28 +156,78 @@
 
 				try {
 
-					options = ('string' === typeof options) ? { text: options } : options;
+					if ('undefined' === typeof options) {
+						reject('Missing options');
+					}
+					else {
 
-					exec((_isWindows) ?
-						_cscriptPath + ' "' + path.join(_batchsPath, 'playtext.vbs') + '"'  + ' "' + options.text + '"' :
-						_espeakPath + ' -v fr+f5 -k 5 -s 150 -a 10 "' + options.text + '"', function (err, stdout, stderr) {
+						options = ('string' === typeof options) ? { text: options } : options;
 
-						if (err) {
-							reject(stderr);
+						if ('object' !== typeof options) {
+							reject('Invalid options');
+						}
+						else if ('string' !== typeof options.text) {
+							reject((('undefined' === typeof options.text) ? 'Missing' : 'Invalid') + ' text');
 						}
 						else {
-							resolve();
+
+							_guessDefaultVoice().then(function() {
+
+								let args = [];
+
+								if ('object' !== typeof options.voice && 'string' !== typeof options.voice) {
+									options.voice = _defaultVoice;
+								}
+
+								options.volume = ('undefined' === typeof options.volume) ? 100 : Math.round(options.volume);
+									options.volume = (0 > options.volume) ? 0 : options.volume;
+									options.volume = (100 < options.volume) ? 100 : options.volume;
+
+								options.speed = ('undefined' === typeof options.speed) ? 50 : Math.round(options.speed);
+									options.speed = (0 > options.speed) ? 0 : options.speed;
+									options.speed = (100 < options.speed) ? 100 : options.speed;
+
+								if (_isWindows) {
+									args.push('-v', options.volume); // 0 -> 100
+									args.push('-r', Math.round((options.speed / 5)) - 10); // -10 -> 10
+									args.push('-voice', ('string' === typeof options.voice) ? '"' + options.voice + '"' : '"' + options.voice.Name + '"');
+								}
+								else {
+									args.push('-a', options.volume * 2); // 0 -> 200
+									args.push('-s', Math.round((options.speed / 50 * 80) + 80)); // 80 -> 240
+									args.push('-v', ('string' === typeof options.voice) ? '"' + options.voice + '"' : '"' + options.voice.VoiceName + '"');
+								}
+
+								args.push('"' + options.text + '"');
+
+								exec((_isWindows) ?
+									_cscriptPath + ' "' + path.join(_batchsPath, 'playtext.vbs') + '" ' + args.join(' ') :
+									_espeakPath + ' ' + args.join(' '), function (err, stdout, stderr) {
+
+									if (err) {
+										reject(stderr);
+									}
+									else {
+										resolve();
+									}
+
+								});
+
+							}).catch(reject);
+
 						}
 
-					});
+					}
 
 				}
 				catch(e) {
-					reject(e);
+					reject((e.message) ? e.message : e);
 				}
 
 			});
 
 		}
 
-	};
+	}
+
+	module.exports = SimpleTTS;
