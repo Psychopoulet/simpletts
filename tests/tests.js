@@ -3,130 +3,44 @@
 
 // deps
 
-	const SimpleTTS = require(require('path').join(__dirname, '..', 'main.js'));
+	const	assert = require('assert'),
+			SimpleTTS = require(require('path').join(__dirname, '..', 'main.js'));
 
 // tests
 
-	function testGetVoices() {
+describe('get system type', function() {
 
-		return new Promise(function(resolve, reject) {
+	it('should return a string', function() {
+		assert.strictEqual('string', typeof SimpleTTS.getTTSSystem(), "TTS system not returned as a string");
+	});
 
-			try {
+});
 
-				console.log("----------------");
-				console.log("test get voices");
-				console.log("----------------");
-				console.log("");
+describe('get voices', function() {
 
-				console.log("must be == <voices> :");
-				
-				SimpleTTS.getVoices().then(function(voices) {
+	it('should return a voices array', function(done) {
 
-					console.log(voices);
+		SimpleTTS.getVoices().then(function(voices) {
+			assert.strictEqual(true, voices instanceof Array, "voices are not returned as an array");
+			done();
+		}).catch(done);
 
-					console.log("");
-					console.log("----------------");
+	});
 
-					resolve(voices);
+});
 
-				}).catch(function(err) {
+describe('read', function() {
 
-					console.log(err);
+	it('should play a text with options', function(done) {
 
-					console.log("");
-					console.log("----------------");
+		SimpleTTS.getVoices().then(function(voices) {
+			return SimpleTTS.read({text: "ceci est un test", voice: voices[0], speed: 70, volume: 30});
+		}).then(done).catch(done);
 
-					reject();
+	}).timeout(4000);
 
-				});
+	it('should play a text without options', function(done) {
+		SimpleTTS.read("ceci est un test").then(done).catch(done);
+	}).timeout(4000);
 
-			}
-			catch (e) {
-				console.log(e);
-				reject(e);
-			}
-
-		});
-
-	}
-
-	function testRead(voices) {
-
-		return new Promise(function(resolve, reject) {
-
-			try {
-
-				console.log("");
-				console.log("");
-
-				console.log("----------------");
-				console.log("test read");
-				console.log("----------------");
-				console.log("");
-
-				console.log("must be == 'Ok with options' :");
-				
-				SimpleTTS.read({text: "ceci est un test", voice: voices[0], speed: 70, volume: 30}).then(function() {
-
-					console.log('Ok with options');
-
-					console.log("");
-					console.log("must be == 'Ok without options' :");
-
-					SimpleTTS.read("ceci est un test").then(function() {
-
-						console.log('Ok without options');
-						
-						console.log("");
-						console.log("----------------");
-
-						resolve();
-
-					}).catch(function(err) {
-
-						console.log(err);
-						
-						console.log("");
-						console.log("----------------");
-
-						reject();
-
-					});
-					
-				}).catch(function(err) {
-
-					console.log(err);
-					
-					console.log("");
-					console.log("----------------");
-
-					reject();
-
-				});
-
-			}
-			catch (e) {
-				console.log(e);
-				reject(e);
-			}
-
-		});
-
-	}
-
-// run
-
-	try {
-
-		console.log("");
-		console.log("");
-		console.log(SimpleTTS.getTTSSystem());
-		console.log("");
-		console.log("");
-
-		testGetVoices().then(testRead);
-
-	}
-	catch (e) {
-		console.log(e);
-	}
+});

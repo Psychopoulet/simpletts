@@ -61,7 +61,7 @@ SimpleTTS.getVoices().then(function(voices) {
 ## Tests
 
 ```bash
-$ node tests/tests.js
+$ mocha tests/tests.js
 ```
 
 ## License
