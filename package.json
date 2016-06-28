@@ -2,10 +2,10 @@
   "name": "simpletts",
   "version": "1.2.0",
   "description": "A basic TTS manager",
-  "main": "main.js",
+  "main": "lib/main.js",
   "scripts": {
-    "start": "node main.js",
-    "test": "mocha tests/tests.js"
+    "start": "node lib/main.js",
+    "test": "gulp"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,13 @@
     "url": "https://github.com/Psychopoulet/simpletts/issues"
   },
   "dependencies": {},
-  "devDependencies": {},
-  "homepage": "https://github.com/Psychopoulet/simpletts#readme"
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-eslint": "^2.0.0",
+    "gulp-exclude-gitignore": "^1.0.0",
+    "gulp-mocha": "^2.0.0",
+    "gulp-plumber": "^1.0.0"
+  },
+  "homepage": "https://github.com/Psychopoulet/simpletts#readme",
+  "engines" : { "node" : ">=4.0.0" }
 }
