@@ -7,6 +7,18 @@ A basic tss manager, based on Microsoft Speech API or espeak for others OS
 $ npm install simpletss
 ```
 
+### Espeak (if not SAPI)
+
+* On Linux
+
+```bash
+$ apt-get install espeak
+```
+
+* Or, download installer
+
+http://espeak.sourceforge.net/download.html
+
 ## Features
 
   * simply read & play text
