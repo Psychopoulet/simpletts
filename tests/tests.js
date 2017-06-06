@@ -8,39 +8,43 @@
 
 // tests
 
-describe("get system type", function() {
+describe("get system type", () => {
 
-	it("should return a string", function() {
+	it("should return a string", () => {
 		assert.strictEqual("string", typeof SimpleTTS.getTTSSystem(), "TTS system not returned as a string");
 	});
 
 });
 
-describe("get voices", function() {
+describe("get voices", () => {
 
-	it("should return a voices array", function(done) {
+	it("should return a voices array", () => {
 
-		SimpleTTS.getVoices().then(function(voices) {
+		return SimpleTTS.getVoices().then((voices) => {
+
+
+			console.log(voices);
+
 			assert.strictEqual(true, voices instanceof Array, "voices are not returned as an array");
-			done();
-		}).catch(done);
+			return Promise.resolve();
+		});
 
 	});
 
 });
 
-describe("read", function() {
+describe("read", () => {
 
-	it("should play a text with options", function(done) {
+	it("should play a text with options", () => {
 
-		SimpleTTS.getVoices().then(function(voices) {
+		return SimpleTTS.getVoices().then((voices) => {
 			return SimpleTTS.read({text: "ceci est un test", voice: voices[0], speed: 70, volume: 30});
-		}).then(done).catch(done);
+		});
 
 	}).timeout(4000);
 
-	it("should play a text without options", function(done) {
-		SimpleTTS.read("ceci est un test").then(done).catch(done);
+	it("should play a text without options", () => {
+		return SimpleTTS.read("ceci est un test");
 	}).timeout(4000);
 
 });

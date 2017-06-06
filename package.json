@@ -5,14 +5,21 @@
   "main": "lib/main.js",
   "scripts": {
     "start": "node lib/main.js",
-    "test": "gulp"
+    "test": "npm update && gulp mocha"
   },
+  "pre-commit": [
+    "test"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/Psychopoulet/simpletts.git"
   },
   "keywords": [
-    "tts", "speech", "text", "text to speech", "text-to-speech"
+    "tts",
+    "speech",
+    "text",
+    "text to speech",
+    "text-to-speech"
   ],
   "author": "Sébastien VIDAL",
   "license": "ISC",
@@ -21,12 +28,14 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "gulp": "^3.9.0",
-    "gulp-eslint": "^2.0.0",
-    "gulp-exclude-gitignore": "^1.0.0",
-    "gulp-mocha": "^2.0.0",
-    "gulp-plumber": "^1.0.0"
+    "gulp": "^3.9.1",
+    "gulp-plumber": "^1.1.0",
+    "gulp-eslint": "^3.0.1",
+    "gulp-mocha": "^4.3.1",
+    "pre-commit": "^1.2.2"
   },
   "homepage": "https://github.com/Psychopoulet/simpletts#readme",
-  "engines" : { "node" : ">=4.0.0" }
+  "engines": {
+    "node": ">=4.0.0"
+  }
 }
