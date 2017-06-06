@@ -11,51 +11,55 @@ $ npm install simpletss
 
   * simply read & play text
 
+## Doc
+
+  * ``` static getTTSSystem() : return string ``` 'sapi' or 'espeak'
+  * ``` static setDefaultVoice(object) : return void ```
+  * ``` static getVoices() : return Promise instance ```
+
+```javascript
+// voice :
+{ string name, string gender }
+```
+
+  * ``` static read(string) : return Promise instance ```
+  * ``` static read(object options) : return Promise instance ```
+
+```javascript
+// options :
+{
+	string text,
+	object voice | string voiceName, // optionnal, default first language detected
+	integer volume, // optionnal, percentage, 0 -> 100, default 100
+	integer speed // optionnal, percentage, 0 -> 100, default 50
+}
+```
+
 ## Examples
 
-```js
+```javascript
+const simpletts = require('simpletts');
 
-const SimpleTTS = require('simpletts');
+simpletts.getVoices().then((voices) => {
 
-console.log(SimpleTTS.getTTSSystem()); // 'SAPI' or 'espeak'
+	console.log(voices[0].name);
+	console.log(voices[0].gender);
 
-SimpleTTS.getVoices().then(function(voices) {
-
-	console.log(voices); // depend of the TTS system used
-
-	SimpleTTS.read({
-		text: "ceci est un test",
-		voice: voices[0], // optionnal, object or text, default first language detected
-		volume: 100, // optionnal, percentage, 0 -> 100, default 100
-		speed: 50 // optionnal, percentage, 0 -> 100, default 50
-	}).then(function() {
-
-		console.log('Ok');
-		
-	}).catch(function(err) {
-
-		console.log(err);
-		
-	});
-
-	SimpleTTS.read("ceci est un test").then(function() {
-		// is equal to { text: "ceci est un test", voice: voices[0], volume: 100, speed: 50 }
-
-		console.log('Ok');
-		
-	}).catch(function(err) {
-
-		console.log(err);
-		
-	});
-
-	// the default language can be changed like that :
-	SimpleTTS.setDefaultVoice(voices[1]);
-
-}).catch(function(err) {
+}).catch((err) => {
 	console.log(err);
 });
 
+simpletts.read({ text: "this is a test", volume: 75, speed: 60 }).then(() => {
+	console.log('Ok');
+}).catch((err) => {
+	console.log(err);
+});
+
+simpletts.read("this is a test").then(() => { // is equal to { text: "this is a test", voice: voices[0], volume: 100, speed: 50 }
+	console.log('Ok');
+}).catch((err) => {
+	console.log(err);
+});
 ```
 
 ## Tests
