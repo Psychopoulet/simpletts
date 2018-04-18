@@ -1,14 +1,14 @@
-# simpletss
+# simpletts
 A basic tss manager, based on Microsoft Speech API or espeak for others OS
 
-[![Build Status](https://api.travis-ci.org/Psychopoulet/simpletss.svg?branch=master)](https://travis-ci.org/Psychopoulet/simpletss)
-[![Coverage Status](https://coveralls.io/repos/github/Psychopoulet/simpletss/badge.svg?branch=master)](https://coveralls.io/github/Psychopoulet/simpletss)
-[![Dependency Status](https://img.shields.io/david/Psychopoulet/simpletss/master.svg)](https://github.com/Psychopoulet/simpletss)
+[![Build Status](https://api.travis-ci.org/Psychopoulet/simpletts.svg?branch=master)](https://travis-ci.org/Psychopoulet/simpletts)
+[![Coverage Status](https://coveralls.io/repos/github/Psychopoulet/simpletts/badge.svg?branch=master)](https://coveralls.io/github/Psychopoulet/simpletts)
+[![Dependency Status](https://img.shields.io/david/Psychopoulet/simpletts/master.svg)](https://github.com/Psychopoulet/simpletts)
 
 ## Installation
 
 ```bash
-$ npm install simpletss
+$ npm install simpletts
 ```
 
 ### Espeak (if not SAPI)
