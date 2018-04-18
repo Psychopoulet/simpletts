@@ -1,6 +1,10 @@
 # simpletss
 A basic tss manager, based on Microsoft Speech API or espeak for others OS
 
+[![Build Status](https://api.travis-ci.org/Psychopoulet/simpletss.svg?branch=master)](https://travis-ci.org/Psychopoulet/simpletss)
+[![Coverage Status](https://coveralls.io/repos/github/Psychopoulet/simpletss/badge.svg?branch=master)](https://coveralls.io/github/Psychopoulet/simpletss)
+[![Dependency Status](https://img.shields.io/david/Psychopoulet/simpletss/master.svg)](https://github.com/Psychopoulet/simpletss)
+
 ## Installation
 
 ```bash
@@ -77,7 +81,7 @@ simpletts.read("this is a test").then(() => { // is equal to { text: "this is a 
 ## Tests
 
 ```bash
-$ mocha tests/tests.js
+$ gulp
 ```
 
 ## License
