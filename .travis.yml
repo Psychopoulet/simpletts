@@ -1,7 +1,6 @@
-sudo: required
 language: node_js
 node_js:
   - "8"
-before_script: "apt-get install espeak"
+install: "sudo apt-get install espeak"
 script: "npm run-script tests"
 sudo: false
