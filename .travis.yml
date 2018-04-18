@@ -1,6 +1,9 @@
 language: node_js
 node_js:
   - "8"
-install: "apt-get install espeak"
+addons:
+  apt:
+    packages:
+    - espeak
 script: "npm run-script tests"
 sudo: false

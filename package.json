@@ -7,7 +7,7 @@
     "tests": "gulp tests"
   },
   "pre-commit": [
-    "test"
+    "tests"
   ],
   "repository": {
     "type": "git",
