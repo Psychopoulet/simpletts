@@ -29,6 +29,22 @@ http://espeak.sourceforge.net/download.html
 
 ## Doc
 
+### Attributes
+
+  * ``` defaultVoice: Voice (default = null) ```
+  * ``` forceEspeak: boolean (default = false) ```
+  * ``` reader: ChildProcess (default = nyll) ```
+
+### Methods
+
+  * ``` getTTSSystem(void): string ("sapi"|"espeak") ```
+  * ``` getVoices(void): Promise<resolve<Array<Voice>>|reject<Error>> ```
+  * ``` isReading(void): boolean ```
+  * ``` read(Options|string): Promise<resolve<Options>|reject<Error>> ```
+  * ``` stopReading(void): Promise<resolve<void>|reject<Error>> ```
+
+### Interfaces
+
 ```javascript
 interface Voice {
 	name: string,
@@ -42,13 +58,6 @@ interface Options {
 	< integer speed > // percentage, 0 -> 100, default 50
 }
 ```
-
-  * ``` forceEspeak: boolean (default = false) ```
-  * ``` defaultVoice: Voice (default = null) ```
-  * ``` getTTSSystem(void): string ("sapi"|"espeak") ```
-  * ``` setDefaultVoice(Voice): void ```
-  * ``` getVoices(void): Promise<resolve<Array<Voice>>|reject<Error>> ```
-  * ``` read(Options|string): Promise<resolve<void>|reject<Error>> ```
 
 ## Examples
 

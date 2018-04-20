@@ -99,7 +99,24 @@ describe("read", () => {
 	});
 
 	it("should play a text without options", () => {
-		return tts.read("test");
+
+		return tts.read("test").then((options) => {
+
+			assert.strictEqual(typeof options, "object", "This is not an object");
+			assert.strictEqual(typeof options.text, "string", "This is not a valid option");
+				assert.strictEqual(options.text, "test", "This is not the wanted option");
+			assert.strictEqual(typeof options.voice, "object", "This is not a valid option");
+				assert.strictEqual(typeof options.voice.gender, "string", "This is not a valid option");
+				assert.strictEqual(typeof options.voice.name, "string", "This is not a valid option");
+			assert.strictEqual(typeof options.volume, "number", "This is not a valid option");
+				assert.strictEqual(options.volume, 100, "This is not the wanted option");
+			assert.strictEqual(typeof options.speed, "number", "This is not a valid option");
+				assert.strictEqual(options.speed, 50, "This is not the wanted option");
+
+			return Promise.resolve();
+
+		});
+
 	}).timeout(MAX_TIMEOUT);
 
 	it("should play a text with options", () => {
@@ -109,10 +126,27 @@ describe("read", () => {
 			voice = voices.shift();
 
 			return tts.read({
-				"voice": voices[0],
+				voice,
 				"volume": 30,
 				"speed": 70,
 				"text": "test"
+			}).then((options) => {
+
+				assert.strictEqual(typeof options, "object", "This is not an object");
+				assert.strictEqual(typeof options.text, "string", "This is not a valid option");
+					assert.strictEqual(options.text, "test", "This is not the wanted option");
+				assert.strictEqual(typeof options.voice, "object", "This is not a valid option");
+					assert.strictEqual(typeof options.voice.gender, "string", "This is not a valid option");
+						assert.strictEqual(options.voice.gender, voice.gender, "This is not the wanted option");
+					assert.strictEqual(typeof options.voice.name, "string", "This is not a valid option");
+						assert.strictEqual(options.voice.name, voice.name, "This is not the wanted option");
+				assert.strictEqual(typeof options.volume, "number", "This is not a valid option");
+					assert.strictEqual(options.volume, 30, "This is not the wanted option");
+				assert.strictEqual(typeof options.speed, "number", "This is not a valid option");
+					assert.strictEqual(options.speed, 70, "This is not the wanted option");
+
+				return Promise.resolve();
+
 			});
 
 		});
@@ -124,6 +158,20 @@ describe("read", () => {
 		return tts.read({
 			"voice": voice.name,
 			"text": "test"
+		}).then((options) => {
+
+			assert.strictEqual(typeof options, "object", "This is not an object");
+			assert.strictEqual(typeof options.text, "string", "This is not a valid option");
+				assert.strictEqual(options.text, "test", "This is not the wanted option");
+			assert.strictEqual(typeof options.voice, "string", "This is not a valid option");
+				assert.strictEqual(options.voice, voice.name, "This is not the wanted option");
+			assert.strictEqual(typeof options.volume, "number", "This is not a valid option");
+				assert.strictEqual(options.volume, 100, "This is not the wanted option");
+			assert.strictEqual(typeof options.speed, "number", "This is not a valid option");
+				assert.strictEqual(options.speed, 50, "This is not the wanted option");
+
+			return Promise.resolve();
+
 		});
 
 	}).timeout(MAX_TIMEOUT);
@@ -134,6 +182,23 @@ describe("read", () => {
 			"volume": -20,
 			"speed": -20,
 			"text": "test"
+		}).then((options) => {
+
+			assert.strictEqual(typeof options, "object", "This is not an object");
+			assert.strictEqual(typeof options.text, "string", "This is not a valid option");
+				assert.strictEqual(options.text, "test", "This is not the wanted option");
+			assert.strictEqual(typeof options.voice, "object", "This is not a valid option");
+				assert.strictEqual(typeof options.voice.gender, "string", "This is not a valid option");
+					assert.strictEqual(options.voice.gender, voice.gender, "This is not the wanted option");
+				assert.strictEqual(typeof options.voice.name, "string", "This is not a valid option");
+					assert.strictEqual(options.voice.name, voice.name, "This is not the wanted option");
+			assert.strictEqual(typeof options.volume, "number", "This is not a valid option");
+				assert.strictEqual(options.volume, 0, "This is not the wanted option");
+			assert.strictEqual(typeof options.speed, "number", "This is not a valid option");
+				assert.strictEqual(options.speed, 0, "This is not the wanted option");
+
+			return Promise.resolve();
+
 		});
 
 	}).timeout(MAX_TIMEOUT);
@@ -144,9 +209,59 @@ describe("read", () => {
 			"volume": 120,
 			"speed": 120,
 			"text": "test"
+		}).then((options) => {
+
+			assert.strictEqual(typeof options, "object", "This is not an object");
+			assert.strictEqual(typeof options.text, "string", "This is not a valid option");
+				assert.strictEqual(options.text, "test", "This is not the wanted option");
+			assert.strictEqual(typeof options.voice, "object", "This is not a valid option");
+				assert.strictEqual(typeof options.voice.gender, "string", "This is not a valid option");
+					assert.strictEqual(options.voice.gender, voice.gender, "This is not the wanted option");
+				assert.strictEqual(typeof options.voice.name, "string", "This is not a valid option");
+					assert.strictEqual(options.voice.name, voice.name, "This is not the wanted option");
+			assert.strictEqual(typeof options.volume, "number", "This is not a valid option");
+				assert.strictEqual(options.volume, 100, "This is not the wanted option");
+			assert.strictEqual(typeof options.speed, "number", "This is not a valid option");
+				assert.strictEqual(options.speed, 100, "This is not the wanted option");
+
+			return Promise.resolve();
+
 		});
 
 	}).timeout(MAX_TIMEOUT);
+
+	it("should play multiple reads", (done) => {
+
+		tts.read("this is a test running").then(() => {
+			done();
+		}).catch(done);
+
+		setTimeout(() => {
+
+			tts.read("test").then(() => {
+				done(new Error("Does not generate an error"));
+			}).catch((err) => {
+
+				assert.strictEqual(typeof err, "object", "This is not an object");
+				assert.strictEqual(err instanceof Error, true, "This is not a valid error");
+
+			});
+
+		}, 200);
+
+	}).timeout(MAX_TIMEOUT);
+
+	it("should play stop read", () => {
+
+		return tts.getVoices().then(() => {
+
+			tts.read("this is a test running");
+
+			return tts.stopReading();
+
+		});
+
+	});
 
 	if (IS_WINDOWS) {
 
