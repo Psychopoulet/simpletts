@@ -251,18 +251,6 @@ describe("read", () => {
 
 	}).timeout(MAX_TIMEOUT);
 
-	it("should play stop read", () => {
-
-		return tts.getVoices().then(() => {
-
-			tts.read("this is a test running");
-
-			return tts.stopReading();
-
-		});
-
-	});
-
 	if (IS_WINDOWS) {
 
 		it("should test force espeak", () => {
