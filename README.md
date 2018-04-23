@@ -37,7 +37,7 @@ http://espeak.sourceforge.net/download.html
 
 ### Methods
 
-  * ``` getTTSSystem(void): string ("sapi"|"espeak") ```
+  * ``` getTTSSystem(void): "sapi" | "espeak" ```
   * ``` getVoices(void): Promise<resolve<Array<Voice>>|reject<Error>> ```
   * ``` isReading(void): boolean ```
   * ``` read(Options|string): Promise<resolve<Options>|reject<Error>> ```
@@ -48,7 +48,7 @@ http://espeak.sourceforge.net/download.html
 ```javascript
 interface Voice {
 	name: string,
-	gender: string ("male"|"female")
+	gender: "female" | "male"
 }
 
 interface Options {
