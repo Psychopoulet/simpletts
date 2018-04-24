@@ -3,6 +3,7 @@
   "version": "2.1.0",
   "description": "A basic TTS manager",
   "main": "lib/main.js",
+  "typings": "lib/index.d.ts",
   "scripts": {
     "tests": "gulp tests"
   },
@@ -21,22 +22,26 @@
     "text-to-speech"
   ],
   "author": "Sébastien VIDAL",
+  "contributors": [
+    "taffeldt",
+    "JDBar"
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Psychopoulet/simpletts/issues"
   },
   "dependencies": {},
   "devDependencies": {
+    "@types/node": "9.6.6",
     "gulp": "3.9.1",
-    "gulp-plumber": "1.1.0",
-    "gulp-eslint": "4.0.0",
-    "gulp-mocha": "3.0.1",
-    "gulp-istanbul": "1.1.2",
     "gulp-coveralls": "0.1.4",
+    "gulp-eslint": "4.0.0",
+    "gulp-istanbul": "1.1.2",
+    "gulp-mocha": "3.0.1",
+    "gulp-plumber": "1.1.0",
     "pre-commit": "1.2.2"
   },
   "homepage": "https://github.com/Psychopoulet/simpletts#readme",
-  "typings": "index.d.ts",
   "engines": {
     "node": ">=6.0.0"
   }
