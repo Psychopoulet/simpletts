@@ -8,8 +8,4 @@ addons:
     - espeak
 install:
   - "npm install -g typescript"
-before_script:
-  - "tsc ./tests/compilation.ts"
 script: "npm run-script tests"
-after_script:
-  - "unlink ./tests/compilation.js"

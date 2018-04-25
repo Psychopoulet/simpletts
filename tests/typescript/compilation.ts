@@ -1,6 +1,6 @@
-/// <reference path="../lib/index.d.ts" />
+/// <reference path="../../lib/index.d.ts" />
 
-import SimpleTTS = require("../lib/main.js");
+import SimpleTTS = require("../../lib/main.js");
 
 interface Voice {
 	name: string;
