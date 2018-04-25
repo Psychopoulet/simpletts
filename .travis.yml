@@ -8,4 +8,5 @@ addons:
     - espeak
 install:
   - "npm install -g typescript"
+  - "npm install"
 script: "npm run-script tests"
