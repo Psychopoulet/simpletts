@@ -1,9 +1,15 @@
 language: node_js
 node_js:
+  - "6"
   - "8"
 addons:
   apt:
     packages:
     - espeak
+install:
+  - "npm install -g typescript"
+before_script:
+  - "tsc ./tests/compilation.ts"
 script: "npm run-script tests"
-sudo: false
+after_script:
+  - "unlink ./tests/compilation.js"
