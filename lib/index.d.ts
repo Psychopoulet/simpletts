@@ -4,41 +4,37 @@ declare module "simpletts" {
 
 	import { ChildProcess } from "child_process";
 
-	namespace SimpleTTS {
+	interface Voice {
+		name: string;
+		gender: "female" | "male";
+	}
 
-		interface Voice {
-			name: string;
-			gender: "female" | "male";
-		}
+	interface Options {
+		text: string;
+		volume?: number;
+		speed?: number;
+		voice?: Voice | string;
+	}
 
-		interface Options {
-			text: string;
-			volume?: number;
-			speed?: number;
-			voice?: Voice | string;
-		}
+	class SimpleTTS {
 
-		class SimpleTTS {
+		protected _forceStop: boolean;
+		protected _readPromise: null | Promise<Options>;
 
-			protected _forceStop: boolean;
-			protected _readPromise: null | Promise<Options>;
+		public defaultVoice: null | Voice;
+		public forceEspeak: boolean;
+		public reader: null | ChildProcess;
 
-			public defaultVoice: null | Voice;
-			public forceEspeak: boolean;
-			public reader: null | ChildProcess;
+		constructor();
 
-			constructor();
-
-			public getTTSSystem(): "SAPI" | "espeak";
-			public getVoices(): Promise<Array<Voice>>;
-				public isReading(): boolean;
-				public read(options: Options | string): Promise<Options>;
-				public stopReading(): Promise<void>;
-
-		}
+		public getTTSSystem(): "SAPI" | "espeak";
+		public getVoices(): Promise<Array<Voice>>;
+			public isReading(): boolean;
+			public read(options: Options | string): Promise<Options>;
+			public stopReading(): Promise<void>;
 
 	}
 
-	export = SimpleTTS.SimpleTTS;
+	export = SimpleTTS;
 
 }
