@@ -21,7 +21,7 @@
 
 	const ISTRAVIS = (0, process).env.TRAVIS || false;
 
-	const APP_FILES = [ path.join(__dirname, "lib", "*.js") ];
+	const APP_FILES = [ path.join(__dirname, "lib", "**", "*.js") ];
 	const UNITTESTS_FILES = [ path.join(__dirname, "tests", "**", "*.js") ];
 
 	const ALL_FILES = [ path.join(__dirname, "gulpfile.js") ]
@@ -48,34 +48,34 @@
 
 	});
 
-	gulp.task("istanbul", [ "eslint" ], () => {
+	gulp.task("istanbul", gulp.series("eslint", () => {
 
 		return gulp.src(APP_FILES)
 			.pipe(plumber())
 			.pipe(istanbul({ "includeUntested": true }))
 			.pipe(istanbul.hookRequire());
 
-	});
+	}));
 
-	gulp.task("mocha", [ "istanbul" ], () => {
+	gulp.task("mocha", gulp.series("istanbul", () => {
 
 		return gulp.src(UNITTESTS_FILES)
 			.pipe(plumber())
 			.pipe(mocha())
 			.pipe(istanbul.writeReports())
-			.pipe(istanbul.enforceThresholds({ "thresholds": { "global": 75 } }));
+			.pipe(istanbul.enforceThresholds({ "thresholds": { "global": 85 } }));
 
-	});
+	}));
 
-	gulp.task("coveralls", [ "mocha" ], () => {
+	gulp.task("coveralls", gulp.series("mocha", () => {
 
 		return gulp.src(path.join(__dirname, "coverage", "lcov.info"))
 			.pipe(plumber())
 			.pipe(coveralls());
 
-	});
+	}));
 
-	gulp.task("tests", [ ISTRAVIS ? "coveralls" : "mocha" ]);
+	gulp.task("tests", gulp.series(ISTRAVIS ? "coveralls" : "mocha"));
 
 // watcher
 
@@ -86,4 +86,4 @@
 
 // default
 
-	gulp.task("default", [ "mocha" ]);
+	gulp.task("default", gulp.series("mocha"));

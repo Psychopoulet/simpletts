@@ -29,9 +29,9 @@ declare module "simpletts" {
 
 		public getTTSSystem(): "SAPI" | "espeak";
 		public getVoices(): Promise<Array<Voice>>;
-			public isReading(): boolean;
-			public read(options: Options | string): Promise<Options>;
-			public stopReading(): Promise<void>;
+		public isReading(): boolean;
+		public read(options: Options | string): Promise<Options>;
+		public stopReading(): Promise<void>;
 
 	}
 
