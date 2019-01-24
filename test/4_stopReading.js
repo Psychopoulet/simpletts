@@ -3,9 +3,11 @@
 
 // deps
 
+	// natives
 	const { readFile } = require("fs");
 	const { join } = require("path");
 
+	// locals
 	const SimpleTTS = require(join(__dirname, "..", "lib", "main.js"));
 
 // tests

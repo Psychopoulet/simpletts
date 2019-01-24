@@ -3,7 +3,10 @@
 
 // deps
 
+	// natives
 	const assert = require("assert");
+
+	// locals
 	const SimpleTTS = require(require("path").join(__dirname, "..", "lib", "main.js"));
 
 // consts
@@ -232,19 +235,34 @@ describe("read", () => {
 
 	it("should play multiple reads", (done) => {
 
+		let timeout = null;
+		let error = false;
+
 		tts.read("this is a test running").then(() => {
-			done();
+
+			if (timeout) {
+				clearTimeout(timeout);
+				timeout = null;
+			}
+
+			if (!error) {
+				done();
+			}
+
 		}).catch(done);
 
-		setTimeout(() => {
+		timeout = setTimeout(() => {
 
 			tts.read("test").then(() => {
+				error = true;
 				done(new Error("Does not generate an error"));
 			}).catch((err) => {
 
 				assert.strictEqual(typeof err, "object", "This is not an object");
 				assert.strictEqual(err instanceof Error, true, "This is not a valid error");
 
+			}).catch(() => {
+				error = true;
 			});
 
 		}, 200);

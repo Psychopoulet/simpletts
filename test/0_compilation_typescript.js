@@ -3,9 +3,10 @@
 
 // deps
 
+	// natives
 	const { exec } = require("child_process");
-	const { join } = require("path");
 	const { unlink } = require("fs");
+	const { join } = require("path");
 
 // consts
 

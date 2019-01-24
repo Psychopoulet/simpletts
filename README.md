@@ -1,10 +1,12 @@
 # simpletts
 A basic tss manager, based on Microsoft Speech API or espeak for others OS
 
-[![Build Status](https://api.travis-ci.org/Psychopoulet/simpletts.svg?branch=master)](https://travis-ci.org/Psychopoulet/simpletts)
-[![Coverage Status](https://coveralls.io/repos/github/Psychopoulet/simpletts/badge.svg?branch=master)](https://coveralls.io/github/Psychopoulet/simpletts)
-[![Dependency Status](https://david-dm.org/Psychopoulet/simpletts/status.svg)](https://david-dm.org/Psychopoulet/simpletts)
-[![Dev dependency Status](https://david-dm.org/Psychopoulet/simpletts/dev-status.svg)](https://david-dm.org/Psychopoulet/simpletts?type=dev)
+[![Build status](https://api.travis-ci.org/Psychopoulet/simpletts.svg?branch=master)](https://travis-ci.org/Psychopoulet/simpletts)
+[![Coverage status](https://coveralls.io/repos/github/Psychopoulet/simpletts/badge.svg?branch=master)](https://coveralls.io/github/Psychopoulet/simpletts)
+[![Dependency status](https://david-dm.org/Psychopoulet/simpletts/status.svg)](https://david-dm.org/Psychopoulet/simpletts)
+[![Dev dependency status](https://david-dm.org/Psychopoulet/simpletts/dev-status.svg)](https://david-dm.org/Psychopoulet/simpletts?type=dev)
+[![Issues](https://img.shields.io/github/issues/Psychopoulet/simpletts.svg)](https://github.com/Psychopoulet/simpletts/issues)
+[![Pull requests](https://img.shields.io/github/issues-pr/Psychopoulet/simpletts.svg)](https://github.com/Psychopoulet/simpletts/pulls)
 
 ## Installation
 
@@ -60,6 +62,12 @@ interface Options {
 ```
 
 ## Examples
+
+### Bash
+
+```bash
+$ npx run-script simpletts "This is a test"
+```
 
 ### Typescript
 
@@ -125,7 +133,7 @@ tts.read("this is a test").then(() => { // is equal to { "text": "this is a test
 ## Tests
 
 ```bash
-$ gulp
+$ npm run-script tests
 ```
 
 ## License

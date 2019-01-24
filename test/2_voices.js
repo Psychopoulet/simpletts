@@ -3,7 +3,10 @@
 
 // deps
 
+	// natives
 	const assert = require("assert");
+
+	// locals
 	const SimpleTTS = require(require("path").join(__dirname, "..", "lib", "main.js"));
 
 // consts
