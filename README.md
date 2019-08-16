@@ -1,4 +1,5 @@
 # simpletts
+
 A basic tss manager, based on Microsoft Speech API or espeak for others OS
 
 [![Build status](https://api.travis-ci.org/Psychopoulet/simpletts.svg?branch=master)](https://travis-ci.org/Psychopoulet/simpletts)
@@ -14,36 +15,54 @@ A basic tss manager, based on Microsoft Speech API or espeak for others OS
 $ npm install simpletts
 ```
 
+## ElectronJS bug fixed
+
+When using with electronjs in Windows, you need to move "vbs" scripts to external folder and pass folder path in constructor. Case don't pass path to constructor `SimpleTTS`, default get in `simpletts/batchs`.
+
+```javascript
+/**
+ * move "listvoices.vbs" and "playtext.vbs" in
+ * "./node_modules/simpletts/batchs" to external folder.
+ * ex: ./plugins/vbs/*
+ */
+
+const { resolve } = require("path");
+const SimpleTTS = require("simpletts");
+
+const vbsFolders = resolve("plugins", "vbs");
+const simpleTTS = new SimpleTTS(vbsFolders);
+```
+
 ### Espeak (if not SAPI)
 
-* On Linux
+- On Linux
 
 ```bash
 $ apt-get install espeak
 ```
 
-* Or, download installer
+- Or, download installer
 
 http://espeak.sourceforge.net/download.html
 
 ## Features
 
-  * simply read & play text
+- simply read & play text
 
 ## Doc
 
 ### Attributes
 
-  * ``` defaultVoice: Voice (default = null) ```
-  * ``` forceEspeak: boolean (default = false) ```
+- `defaultVoice: Voice (default = null)`
+- `forceEspeak: boolean (default = false)`
 
 ### Methods
 
-  * ``` getTTSSystem(void): "sapi" | "espeak" ```
-  * ``` getVoices(void): Promise<resolve<Array<Voice>>|reject<Error>> ```
-  * ``` isReading(void): boolean ```
-  * ``` read(Options|string): Promise<resolve<Options>|reject<Error>> ```
-  * ``` stopReading(void): Promise<resolve<void>|reject<Error>> ```
+- `getTTSSystem(void): "sapi" | "espeak"`
+- `getVoices(void): Promise<resolve<Array<Voice>>|reject<Error>>`
+- `isReading(void): boolean`
+- `read(Options|string): Promise<resolve<Options>|reject<Error>>`
+- `stopReading(void): Promise<resolve<void>|reject<Error>>`
 
 ### Interfaces
 
@@ -75,31 +94,33 @@ $ npx run-script simpletts "This is a test"
 import SimpleTTS = require("simpletts");
 
 interface Voice {
-	name: string;
-	gender: "female" | "male";
+  name: string;
+  gender: "female" | "male";
 }
 
 interface Options {
-	text: string;
-	volume?: number;
-	speed?: number;
-	voice?: Voice | string;
+  text: string;
+  volume?: number;
+  speed?: number;
+  voice?: Voice | string;
 }
 
 const tts = new SimpleTTS();
 
-tts.getVoices().then((voices: Array<Voice>) => {
-
-	return tts.read({
-		"text": "test",
-		"voice": voices[0]
-	});
-
-}).then((options: Options) => {
-	console.log(options);
-}).catch((err: Error) => {
-	console.log(err);
-});
+tts
+  .getVoices()
+  .then((voices: Array<Voice>) => {
+    return tts.read({
+      text: "test",
+      voice: voices[0]
+    });
+  })
+  .then((options: Options) => {
+    console.log(options);
+  })
+  .catch((err: Error) => {
+    console.log(err);
+  });
 ```
 
 ### Native
@@ -108,26 +129,34 @@ tts.getVoices().then((voices: Array<Voice>) => {
 const SimpleTTS = require("simpletts");
 const tts = new SimpleTTS();
 
-tts.getVoices().then((voices) => {
+tts
+  .getVoices()
+  .then(voices => {
+    console.log(voices[0].name);
+    console.log(voices[0].gender);
+  })
+  .catch(err => {
+    console.log(err);
+  });
 
-	console.log(voices[0].name);
-	console.log(voices[0].gender);
+tts
+  .read({ text: "this is a test", volume: 75, speed: 60 })
+  .then(() => {
+    console.log("Ok");
+  })
+  .catch(err => {
+    console.log(err);
+  });
 
-}).catch((err) => {
-	console.log(err);
-});
-
-tts.read({ "text": "this is a test", "volume": 75, "speed": 60 }).then(() => {
-	console.log("Ok");
-}).catch((err) => {
-	console.log(err);
-});
-
-tts.read("this is a test").then(() => { // is equal to { "text": "this is a test", "voice": voices[0], "volume": 100, "speed": 50 }
-	console.log("Ok");
-}).catch((err) => {
-	console.log(err);
-});
+tts
+  .read("this is a test")
+  .then(() => {
+    // is equal to { "text": "this is a test", "voice": voices[0], "volume": 100, "speed": 50 }
+    console.log("Ok");
+  })
+  .catch(err => {
+    console.log(err);
+  });
 ```
 
 ## Tests
@@ -138,4 +167,4 @@ $ npm run-script tests
 
 ## License
 
-  [ISC](LICENSE)
+[ISC](LICENSE)
