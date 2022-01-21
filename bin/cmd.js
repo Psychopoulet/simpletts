@@ -13,20 +13,32 @@
 // module
 
 if (!ARGS.length) {
+
 	(0, console).error("There is no sentence to read");
+
 	(0, process).exitCode = 1;
+	(0, process).exit(1);
+
 }
 else if (1 < ARGS.length) {
+
 	(0, console).error("There too many arguments");
+
 	(0, process).exitCode = 1;
+	(0, process).exit(1);
+
 }
 else {
 
 	const TTS = new SimpleTTS();
 
 	TTS.read(ARGS[0]).catch((err) => {
+
 		(0, console).error(err);
+
 		(0, process).exitCode = 1;
+		(0, process).exit(1);
+
 	});
 
 }
