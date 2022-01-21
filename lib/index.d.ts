@@ -25,7 +25,7 @@ declare module "simpletts" {
 		public forceEspeak: boolean;
 		public reader: null | ChildProcess;
 
-		constructor();
+		constructor(scriptsFolderPath?: string);
 
 		public getTTSSystem(): "SAPI" | "espeak";
 		public getVoices(): Promise<Array<Voice>>;

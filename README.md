@@ -61,6 +61,22 @@ interface Options {
 }
 ```
 
+## ElectronJS
+
+When using with electronjs in Windows, you can move "vbs" scripts to external folder and pass folder path in constructor.
+
+```javascript
+/**
+ * move "listvoices.vbs" and "playtext.vbs" in
+ * "./node_modules/simpletts/batchs" to external folder.
+ * ex: ./plugins/vbs/*
+ */
+const { resolve } = require("path");
+const SimpleTTS = require("simpletts");
+const vbsFolders = resolve("plugins", "vbs");
+const simpleTTS = new SimpleTTS(vbsFolders);
+```
+
 ## Examples
 
 ### Bash
