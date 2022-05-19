@@ -1,6 +1,6 @@
 {
   "name": "simpletts",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "description": "A basic TTS manager",
   "main": "lib/main.js",
   "typings": "lib/index.d.ts",
