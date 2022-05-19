@@ -5,8 +5,8 @@
 
 	// natives
 	const { exec } = require("child_process");
-	const { unlink } = require("fs");
 	const { join } = require("path");
+	const { unlink } = require("fs");
 
 // consts
 
@@ -26,7 +26,7 @@ describe("compilation typescript", () => {
 
 	it("should compile typescript file", (done) => {
 
-		exec("tsc " + join(__dirname, "typescript", "compilation.ts"), {
+		exec("npx tsc " + join(__dirname, "typescript", "compilation.ts"), {
 			"cwd": join(__dirname, ".."),
 			"windowsHide": true
 		}, (err) => {

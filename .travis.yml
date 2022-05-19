@@ -1,12 +1,8 @@
 language: node_js
 node_js:
-  - "8"
   - "10"
-addons:
-  apt:
-    packages:
-    - espeak
+  - "12"
+  - "14"
 install:
-  - "npm install -g typescript"
   - "npm install"
-script: "npm run-script tests"
+script: "npm run-script ci"
