@@ -12,7 +12,7 @@
 
 // tests
 
-describe("read", () => {
+describe("stopReading", () => {
 
 	const tts = new SimpleTTS();
 

@@ -4,19 +4,19 @@ declare module "simpletts" {
 
 	import { ChildProcess } from "child_process";
 
-	export interface Voice {
+	interface Voice {
 		name: string;
 		gender: "female" | "male";
 	}
 
-	export interface Options {
+	interface Options {
 		text: string;
 		volume?: number;
 		speed?: number;
 		voice?: Voice | string;
 	}
 
-	export class SimpleTTS {
+	class SimpleTTS {
 
 		protected _forceStop: boolean;
 		protected _readPromise: null | Promise<Options>;
@@ -35,6 +35,6 @@ declare module "simpletts" {
 
 	}
 
-	export default SimpleTTS;
+	export = SimpleTTS;
 
 }
