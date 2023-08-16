@@ -4,14 +4,16 @@
 // deps
 
 	// natives
-	const assert = require("assert");
+	const { strictEqual } = require("node:assert");
+	const { join } = require("node:path");
+	const { platform } = require("node:os");
 
 	// locals
-	const SimpleTTS = require(require("path").join(__dirname, "..", "lib", "main.js"));
+	const SimpleTTS = require(join(__dirname, "..", "lib", "main.js"));
 
 // consts
 
-	const IS_WINDOWS = "win32" === require("os").platform().trim().toLowerCase();
+	const IS_WINDOWS = "win32" === platform().trim().toLowerCase();
 	const MAX_TIMEOUT = 10000;
 
 // tests
@@ -28,8 +30,8 @@ describe("read", () => {
 			done(new Error("Does not generate an error"));
 		}).catch((err) => {
 
-			assert.strictEqual(typeof err, "object", "This is not an object");
-			assert.strictEqual(err instanceof ReferenceError, true, "This is not a valid error");
+			strictEqual(typeof err, "object", "This is not an object");
+			strictEqual(err instanceof ReferenceError, true, "This is not a valid error");
 
 			done();
 
@@ -43,8 +45,8 @@ describe("read", () => {
 			done(new Error("Does not generate an error"));
 		}).catch((err) => {
 
-			assert.strictEqual(typeof err, "object", "This is not an object");
-			assert.strictEqual(err instanceof TypeError, true, "This is not a valid error");
+			strictEqual(typeof err, "object", "This is not an object");
+			strictEqual(err instanceof TypeError, true, "This is not a valid error");
 
 			done();
 
@@ -58,8 +60,8 @@ describe("read", () => {
 			done(new Error("Does not generate an error"));
 		}).catch((err) => {
 
-			assert.strictEqual(typeof err, "object", "This is not an object");
-			assert.strictEqual(err instanceof ReferenceError, true, "This is not a valid error");
+			strictEqual(typeof err, "object", "This is not an object");
+			strictEqual(err instanceof ReferenceError, true, "This is not a valid error");
 
 			done();
 
@@ -73,8 +75,8 @@ describe("read", () => {
 			done(new Error("Does not generate an error"));
 		}).catch((err) => {
 
-			assert.strictEqual(typeof err, "object", "This is not an object");
-			assert.strictEqual(err instanceof TypeError, true, "This is not a valid error");
+			strictEqual(typeof err, "object", "This is not an object");
+			strictEqual(err instanceof TypeError, true, "This is not a valid error");
 
 			done();
 
@@ -88,8 +90,8 @@ describe("read", () => {
 			done(new Error("Does not generate an error"));
 		}).catch((err) => {
 
-			assert.strictEqual(typeof err, "object", "This is not an object");
-			assert.strictEqual(err instanceof Error, true, "This is not a valid error");
+			strictEqual(typeof err, "object", "This is not an object");
+			strictEqual(err instanceof Error, true, "This is not a valid error");
 
 			done();
 
@@ -105,16 +107,16 @@ describe("read", () => {
 
 		return tts.read("test").then((options) => {
 
-			assert.strictEqual(typeof options, "object", "This is not an object");
-			assert.strictEqual(typeof options.text, "string", "This is not a valid option");
-				assert.strictEqual(options.text, "test", "This is not the wanted option");
-			assert.strictEqual(typeof options.voice, "object", "This is not a valid option");
-				assert.strictEqual(typeof options.voice.gender, "string", "This is not a valid option");
-				assert.strictEqual(typeof options.voice.name, "string", "This is not a valid option");
-			assert.strictEqual(typeof options.volume, "number", "This is not a valid option");
-				assert.strictEqual(options.volume, 100, "This is not the wanted option");
-			assert.strictEqual(typeof options.speed, "number", "This is not a valid option");
-				assert.strictEqual(options.speed, 50, "This is not the wanted option");
+			strictEqual(typeof options, "object", "This is not an object");
+			strictEqual(typeof options.text, "string", "This is not a valid option");
+				strictEqual(options.text, "test", "This is not the wanted option");
+			strictEqual(typeof options.voice, "object", "This is not a valid option");
+				strictEqual(typeof options.voice.gender, "string", "This is not a valid option");
+				strictEqual(typeof options.voice.name, "string", "This is not a valid option");
+			strictEqual(typeof options.volume, "number", "This is not a valid option");
+				strictEqual(options.volume, 100, "This is not the wanted option");
+			strictEqual(typeof options.speed, "number", "This is not a valid option");
+				strictEqual(options.speed, 50, "This is not the wanted option");
 
 			return Promise.resolve();
 
@@ -135,18 +137,18 @@ describe("read", () => {
 				"text": "test"
 			}).then((options) => {
 
-				assert.strictEqual(typeof options, "object", "This is not an object");
-				assert.strictEqual(typeof options.text, "string", "This is not a valid option");
-					assert.strictEqual(options.text, "test", "This is not the wanted option");
-				assert.strictEqual(typeof options.voice, "object", "This is not a valid option");
-					assert.strictEqual(typeof options.voice.gender, "string", "This is not a valid option");
-						assert.strictEqual(options.voice.gender, voice.gender, "This is not the wanted option");
-					assert.strictEqual(typeof options.voice.name, "string", "This is not a valid option");
-						assert.strictEqual(options.voice.name, voice.name, "This is not the wanted option");
-				assert.strictEqual(typeof options.volume, "number", "This is not a valid option");
-					assert.strictEqual(options.volume, 30, "This is not the wanted option");
-				assert.strictEqual(typeof options.speed, "number", "This is not a valid option");
-					assert.strictEqual(options.speed, 70, "This is not the wanted option");
+				strictEqual(typeof options, "object", "This is not an object");
+				strictEqual(typeof options.text, "string", "This is not a valid option");
+					strictEqual(options.text, "test", "This is not the wanted option");
+				strictEqual(typeof options.voice, "object", "This is not a valid option");
+					strictEqual(typeof options.voice.gender, "string", "This is not a valid option");
+						strictEqual(options.voice.gender, voice.gender, "This is not the wanted option");
+					strictEqual(typeof options.voice.name, "string", "This is not a valid option");
+						strictEqual(options.voice.name, voice.name, "This is not the wanted option");
+				strictEqual(typeof options.volume, "number", "This is not a valid option");
+					strictEqual(options.volume, 30, "This is not the wanted option");
+				strictEqual(typeof options.speed, "number", "This is not a valid option");
+					strictEqual(options.speed, 70, "This is not the wanted option");
 
 				return Promise.resolve();
 
@@ -163,15 +165,15 @@ describe("read", () => {
 			"text": "test"
 		}).then((options) => {
 
-			assert.strictEqual(typeof options, "object", "This is not an object");
-			assert.strictEqual(typeof options.text, "string", "This is not a valid option");
-				assert.strictEqual(options.text, "test", "This is not the wanted option");
-			assert.strictEqual(typeof options.voice, "string", "This is not a valid option");
-				assert.strictEqual(options.voice, voice.name, "This is not the wanted option");
-			assert.strictEqual(typeof options.volume, "number", "This is not a valid option");
-				assert.strictEqual(options.volume, 100, "This is not the wanted option");
-			assert.strictEqual(typeof options.speed, "number", "This is not a valid option");
-				assert.strictEqual(options.speed, 50, "This is not the wanted option");
+			strictEqual(typeof options, "object", "This is not an object");
+			strictEqual(typeof options.text, "string", "This is not a valid option");
+				strictEqual(options.text, "test", "This is not the wanted option");
+			strictEqual(typeof options.voice, "string", "This is not a valid option");
+				strictEqual(options.voice, voice.name, "This is not the wanted option");
+			strictEqual(typeof options.volume, "number", "This is not a valid option");
+				strictEqual(options.volume, 100, "This is not the wanted option");
+			strictEqual(typeof options.speed, "number", "This is not a valid option");
+				strictEqual(options.speed, 50, "This is not the wanted option");
 
 			return Promise.resolve();
 
@@ -187,18 +189,18 @@ describe("read", () => {
 			"text": "test"
 		}).then((options) => {
 
-			assert.strictEqual(typeof options, "object", "This is not an object");
-			assert.strictEqual(typeof options.text, "string", "This is not a valid option");
-				assert.strictEqual(options.text, "test", "This is not the wanted option");
-			assert.strictEqual(typeof options.voice, "object", "This is not a valid option");
-				assert.strictEqual(typeof options.voice.gender, "string", "This is not a valid option");
-					assert.strictEqual(options.voice.gender, voice.gender, "This is not the wanted option");
-				assert.strictEqual(typeof options.voice.name, "string", "This is not a valid option");
-					assert.strictEqual(options.voice.name, voice.name, "This is not the wanted option");
-			assert.strictEqual(typeof options.volume, "number", "This is not a valid option");
-				assert.strictEqual(options.volume, 0, "This is not the wanted option");
-			assert.strictEqual(typeof options.speed, "number", "This is not a valid option");
-				assert.strictEqual(options.speed, 0, "This is not the wanted option");
+			strictEqual(typeof options, "object", "This is not an object");
+			strictEqual(typeof options.text, "string", "This is not a valid option");
+				strictEqual(options.text, "test", "This is not the wanted option");
+			strictEqual(typeof options.voice, "object", "This is not a valid option");
+				strictEqual(typeof options.voice.gender, "string", "This is not a valid option");
+					strictEqual(options.voice.gender, voice.gender, "This is not the wanted option");
+				strictEqual(typeof options.voice.name, "string", "This is not a valid option");
+					strictEqual(options.voice.name, voice.name, "This is not the wanted option");
+			strictEqual(typeof options.volume, "number", "This is not a valid option");
+				strictEqual(options.volume, 0, "This is not the wanted option");
+			strictEqual(typeof options.speed, "number", "This is not a valid option");
+				strictEqual(options.speed, 0, "This is not the wanted option");
 
 			return Promise.resolve();
 
@@ -214,18 +216,18 @@ describe("read", () => {
 			"text": "test"
 		}).then((options) => {
 
-			assert.strictEqual(typeof options, "object", "This is not an object");
-			assert.strictEqual(typeof options.text, "string", "This is not a valid option");
-				assert.strictEqual(options.text, "test", "This is not the wanted option");
-			assert.strictEqual(typeof options.voice, "object", "This is not a valid option");
-				assert.strictEqual(typeof options.voice.gender, "string", "This is not a valid option");
-					assert.strictEqual(options.voice.gender, voice.gender, "This is not the wanted option");
-				assert.strictEqual(typeof options.voice.name, "string", "This is not a valid option");
-					assert.strictEqual(options.voice.name, voice.name, "This is not the wanted option");
-			assert.strictEqual(typeof options.volume, "number", "This is not a valid option");
-				assert.strictEqual(options.volume, 100, "This is not the wanted option");
-			assert.strictEqual(typeof options.speed, "number", "This is not a valid option");
-				assert.strictEqual(options.speed, 100, "This is not the wanted option");
+			strictEqual(typeof options, "object", "This is not an object");
+			strictEqual(typeof options.text, "string", "This is not a valid option");
+				strictEqual(options.text, "test", "This is not the wanted option");
+			strictEqual(typeof options.voice, "object", "This is not a valid option");
+				strictEqual(typeof options.voice.gender, "string", "This is not a valid option");
+					strictEqual(options.voice.gender, voice.gender, "This is not the wanted option");
+				strictEqual(typeof options.voice.name, "string", "This is not a valid option");
+					strictEqual(options.voice.name, voice.name, "This is not the wanted option");
+			strictEqual(typeof options.volume, "number", "This is not a valid option");
+				strictEqual(options.volume, 100, "This is not the wanted option");
+			strictEqual(typeof options.speed, "number", "This is not a valid option");
+				strictEqual(options.speed, 100, "This is not the wanted option");
 
 			return Promise.resolve();
 
@@ -258,8 +260,8 @@ describe("read", () => {
 				done(new Error("Does not generate an error"));
 			}).catch((err) => {
 
-				assert.strictEqual(typeof err, "object", "This is not an object");
-				assert.strictEqual(err instanceof Error, true, "This is not a valid error");
+				strictEqual(typeof err, "object", "This is not an object");
+				strictEqual(err instanceof Error, true, "This is not a valid error");
 
 			}).catch(() => {
 				error = true;
