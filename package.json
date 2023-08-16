@@ -1,33 +1,66 @@
 {
+
   "name": "simpletts",
   "version": "2.5.3",
   "description": "A basic TTS manager",
+
+  "type": "commonjs",
   "main": "lib/main.js",
   "typings": "lib/index.d.ts",
+
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/main.js"
+      }
+    }
+  },
+
   "scripts": {
+
     "lint": "npx eslint ./bin/*.js ./lib/**/*.js ./test/**/*.js",
+    "check-requires": "npx used-deps-analyzer \"./package.json\" \"./lib\" --no-dev --overkill \"fs-extra\" \"node-promfs\"",
     "check-updates": "npx check-version-modules",
     "unit-tests": "npx nyc --reporter=html --reporter=text mocha",
-    "tests": "npm run-script lint && npm run-script check-updates && npm run-script unit-tests",
+
+    "tests": "npm run-script lint && npm run check-requires && npm run-script check-updates && npm run-script unit-tests",
     "ci": "npm run-script tests && npx nyc report --reporter=text-lcov | coveralls"
+
   },
+
   "bin": {
     "simpletts": "./bin/cmd.js"
   },
+
   "files": [
     "/batchs",
     "/bin",
     "/lib"
   ],
+  "engines": {
+    "node": ">=16.0.0"
+  },
+
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "20.5.0",
+    "check-version-modules": "1.4.1",
+    "coveralls": "3.1.1",
+    "eslint": "8.47.0",
+    "husky": "8.0.3",
+    "mocha": "10.2.0",
+    "nyc": "15.1.0",
+    "typescript": "5.1.6",
+    "used-deps-analyzer": "0.1.6"
+  },
+  "optionalDependencies": {},
+
   "husky": {
     "hooks": {
       "pre-commit": "npm run-script lint",
       "pre-push": "npm run-script tests"
     }
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/Psychopoulet/simpletts.git"
   },
   "keywords": [
     "tts",
@@ -43,22 +76,14 @@
     "KristjanESPERANTO"
   ],
   "license": "ISC",
+
+  "homepage": "https://github.com/Psychopoulet/simpletts#readme",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Psychopoulet/simpletts.git"
+  },
   "bugs": {
     "url": "https://github.com/Psychopoulet/simpletts/issues"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "@types/node": "18.11.18",
-    "check-version-modules": "1.3.5",
-    "coveralls": "3.1.1",
-    "eslint": "8.31.0",
-    "husky": "8.0.3",
-    "mocha": "10.2.0",
-    "nyc": "15.1.0",
-    "typescript": "4.9.4"
-  },
-  "homepage": "https://github.com/Psychopoulet/simpletts#readme",
-  "engines": {
-    "node": ">=10.0.0"
   }
+
 }
