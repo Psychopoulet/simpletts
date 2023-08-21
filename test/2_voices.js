@@ -9,7 +9,7 @@
 	const { platform } = require("node:os");
 
 	// locals
-	const SimpleTTS = require(join(__dirname, "..", "lib", "main.js"));
+	const SimpleTTS = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
 
 // consts
 

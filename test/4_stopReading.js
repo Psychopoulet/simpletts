@@ -8,7 +8,7 @@
 	const { join } = require("node:path");
 
 	// locals
-	const SimpleTTS = require(join(__dirname, "..", "lib", "main.js"));
+	const SimpleTTS = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
 
 // tests
 

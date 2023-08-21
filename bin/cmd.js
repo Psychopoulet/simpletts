@@ -4,7 +4,7 @@
 // deps
 
 	// locals
-	const SimpleTTS = require(require("path").join(__dirname, "..", "lib", "main.js"));
+	const SimpleTTS = require(require("path").join(__dirname, "..", "lib", "cjs", "main.cjs"));
 
 // consts
 
