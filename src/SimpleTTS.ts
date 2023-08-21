@@ -58,7 +58,7 @@ export default class SimpleTTS {
 
 	// constructor
 
-	public constructor (scriptsFolderPath: string = join(__dirname, "..", "batchs")) {
+	public constructor (scriptsFolderPath: string = join(__dirname, "..", "..", "batchs")) {
 
 		this._forceStop = false;
 		this._readPromise = null;
