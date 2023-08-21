@@ -1,4 +1,4 @@
-import SimpleTTS, { iVoice, iOptions } from "../../src/SimpleTTS";
+import SimpleTTS, { iVoice, iOptions } from "../../lib/cjs/SimpleTTS";
 
 const tts = new SimpleTTS();
 
