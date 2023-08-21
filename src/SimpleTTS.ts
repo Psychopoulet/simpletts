@@ -90,11 +90,11 @@ export default class SimpleTTS {
 				}
 				else {
 
-					const stdout: Array<string> = _stdout.trim().replace(/\r/g, "\n").replace(/\n\n/g, "\n").split("\n");
+					const lines: Array<string> = _stdout.trim().replace(/\r/g, "\n").replace(/\n\n/g, "\n").split("\n");
 
 					if (IS_SAPI) {
 
-						resolve(parseVoicesSAPI(stdout.slice(1, stdout.length), stdout).map((voice: iSAPIVoice): iVoice => {
+						resolve(parseVoicesSAPI(lines).map((voice: iSAPIVoice): iVoice => {
 
 							return {
 								"gender": voice.Gender.trim().toLowerCase() as "female" | "male",
@@ -106,7 +106,7 @@ export default class SimpleTTS {
 					}
 					else {
 
-						resolve(parseVoicesEspeak(stdout.slice(1, stdout.length)).map((voice: iESpeakVoice): iVoice => {
+						resolve(parseVoicesEspeak(lines).map((voice: iESpeakVoice): iVoice => {
 
 							return {
 								"gender": "F" === voice["Age/Gender"] ? "female" : "male",

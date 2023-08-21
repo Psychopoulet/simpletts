@@ -6,34 +6,39 @@
 	// locals
 	export interface iSAPIVoice {
 		"Gender": string;
+		"Age": string;
 		"Name": string;
+		"Language": string;
+		"Vendor": string;
+		"Version": string;
 	};
 
 // module
 
-export default function parseVoicesSAPI (voices: Array<string>, stdout: Array<string>): Array<iSAPIVoice> {
+export default function parseVoicesSAPI (voices: Array<string>): Array<iSAPIVoice> {
 
-	const headers: Array<string> = stdout[0].split(";");
+	const headersLine: string = voices.shift() as string; // remove headers
+	const headers: Array<string> = headersLine.split("|"); // compulse headers
 
-	const result: Array<iSAPIVoice> = [];
+	return voices.map((voice: string): Array<string> => {
+		return voice.split("|");
+	}).map((voiceData: Array<string>): iSAPIVoice => {
 
-		for (let i: number = 0; i < voices.length; ++i) {
+		const result: iSAPIVoice = {
+			"Gender": "",
+			"Age": "",
+			"Name": "",
+			"Language": "",
+			"Vendor": "",
+			"Version": ""
+		};
 
-			const tmp: iSAPIVoice = {
-				"Gender": "",
-				"Name": ""
-			};
+			for (let j: number = 0; j < headers.length; ++j) {
+				result[headers[j] as "Gender" | "Age" | "Name" | "Language" | "Vendor" | "Version"] = voiceData[j].trim();
+			}
 
-				const voice: Array<string> = voices[i].split(";");
+		return result;
 
-				for (let j: number = 0; j < headers.length; ++j) {
-					tmp[headers[j] as "Gender" | "Name"] = voice[j].trim();
-				}
-
-			result.push(tmp);
-
-		}
-
-	return result;
+	});
 
 };
