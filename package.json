@@ -1,28 +1,30 @@
 {
 
   "name": "simpletts",
-  "version": "2.5.4",
+  "version": "2.6.0",
   "description": "A basic TTS manager",
 
   "type": "commonjs",
-  "main": "lib/main.js",
-  "typings": "lib/index.d.ts",
+  "typings": "./lib/cjs/main.d.cts",
+  "main": "./lib/cjs/main.cjs",
 
   "exports": {
     ".": {
       "require": {
-        "types": "./lib/index.d.ts",
-        "default": "./lib/main.js"
+        "types": "./lib/cjs/main.d.cts",
+        "default": "./lib/cjs/main.cjs"
       }
     }
   },
 
   "scripts": {
 
-    "lint": "npx eslint ./bin/*.js ./lib/**/*.js ./test/**/*.js",
-    "check-requires": "npx used-deps-analyzer \"./package.json\" \"./lib\" --no-dev --overkill \"fs-extra\" \"node-promfs\"",
+    "build": "node ./removeOldBuild.js && npx tsc --project \"./tsconfig.json\"",
+
+    "lint": "npx eslint ./test/**/*.js",
+    "check-requires": "npx used-deps-analyzer \"./package.json\" \"./src\" --no-dev --overkill \"fs-extra\" \"node-promfs\"",
     "check-updates": "npx check-version-modules",
-    "unit-tests": "npx nyc --reporter=html --reporter=text mocha",
+    "unit-tests": "npm run build && npx nyc --reporter=html --reporter=text mocha",
 
     "tests": "npm run-script lint && npm run check-requires && npm run-script check-updates && npm run-script unit-tests",
     "ci": "npm run-script tests && npx nyc report --reporter=text-lcov | coveralls"
@@ -44,7 +46,7 @@
 
   "dependencies": {},
   "devDependencies": {
-    "@types/node": "20.5.0",
+    "@types/node": "20.5.1",
     "check-version-modules": "1.4.1",
     "coveralls": "3.1.1",
     "eslint": "8.47.0",

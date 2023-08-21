@@ -7,10 +7,10 @@ Set hSpeaker = CreateObject("SAPI.SpVoice")
 
 ' get voices
 
-list = "Gender;Age;Name;Language;Vendor"
+list = "Gender|Age|Name|Language|Vendor|Version"
 For Each strVoice in hSpeaker.GetVoices
     list = list & vbLf
-    list = list & strVoice.GetAttribute("Gender") & ";" & strVoice.GetAttribute("Age") & ";" & strVoice.GetAttribute("Name") & ";" & strVoice.GetAttribute("Language") & ";" & strVoice.GetAttribute("Vendor")
+    list = list & strVoice.GetAttribute("Gender") & "|" & strVoice.GetAttribute("Age") & "|" & strVoice.GetAttribute("Name") & "|" & strVoice.GetAttribute("Language") & "|" & strVoice.GetAttribute("Vendor") & "|" & strVoice.GetAttribute("Version")
 Next
 
 ' close speaker

@@ -4,14 +4,16 @@
 // deps
 
 	// natives
-	const assert = require("assert");
+	const { strictEqual } = require("node:assert");
+	const { join } = require("node:path");
+	const { platform } = require("node:os");
 
 	// locals
-	const SimpleTTS = require(require("path").join(__dirname, "..", "lib", "main.js"));
+	const SimpleTTS = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
 
 // consts
 
-	const IS_WINDOWS = "win32" === require("os").platform().trim().toLowerCase();
+	const IS_WINDOWS = "win32" === platform().trim().toLowerCase();
 
 // tests
 
@@ -23,8 +25,8 @@ describe("get voices", () => {
 
 		return tts.getVoices().then((voices) => {
 
-			assert.strictEqual(typeof voices, "object", "voices are not returned as an array");
-			assert.strictEqual(voices instanceof Array, true, "voices are not returned as an array");
+			strictEqual(typeof voices, "object", "voices are not returned as an array");
+			strictEqual(voices instanceof Array, true, "voices are not returned as an array");
 
 			return Promise.resolve();
 

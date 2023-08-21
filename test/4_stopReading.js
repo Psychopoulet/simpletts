@@ -4,11 +4,11 @@
 // deps
 
 	// natives
-	const { readFile } = require("fs");
-	const { join } = require("path");
+	const { readFile } = require("node:fs/promises");
+	const { join } = require("node:path");
 
 	// locals
-	const SimpleTTS = require(join(__dirname, "..", "lib", "main.js"));
+	const SimpleTTS = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
 
 // tests
 
@@ -30,13 +30,7 @@ describe("stopReading", () => {
 
 	it("should stop read wih default voice", () => {
 
-		return new Promise((resolve, reject) => {
-
-			readFile(join(__dirname, "lorem.txt"), "utf8", (err, content) => {
-				return err ? reject(err) : resolve(content);
-			});
-
-		}).then((content) => {
+		return readFile(join(__dirname, "lorem.txt"), "utf8").then((content) => {
 
 			tts.read(content);
 

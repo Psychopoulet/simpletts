@@ -1,30 +1,16 @@
-/// <reference path="../../lib/index.d.ts" />
-
-import SimpleTTS = require("../../lib/main.js");
-
-interface Voice {
-	name: string;
-	gender: "female" | "male";
-}
-
-interface Options {
-	text: string;
-	volume?: number;
-	speed?: number;
-	voice?: Voice | string;
-}
+import SimpleTTS, { iVoice, iOptions } from "../../lib/cjs/SimpleTTS";
 
 const tts = new SimpleTTS();
 
-tts.getVoices().then((voices: Array<Voice>) => {
+tts.getVoices().then((voices: Array<iVoice>): Promise<iOptions> => {
 
 	return tts.read({
 		"text": "test",
 		"voice": voices[0]
 	});
 
-}).then((options: Options) => {
+}).then((options: iOptions): void => {
 	console.log(options);
-}).catch((err: Error) => {
+}).catch((err: Error): void => {
 	console.log(err);
 });
