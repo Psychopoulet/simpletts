@@ -21,7 +21,7 @@
 
     "prepare": "npx husky install",
 
-    "clean": "npx rimraf lib/*",
+    "clean": "npx rimraf lib",
     "build": "npm run-script clean && npx tsc --project \"./tsconfig.json\"",
 
     "lint": "npx eslint --config .eslintrc-src.js --ext .cts,.ts ./src/**/* && npx eslint --config .eslintrc-tests.js ./bin/*.js ./test/**/*.js",
