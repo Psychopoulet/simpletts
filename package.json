@@ -19,15 +19,17 @@
 
   "scripts": {
 
-    "build": "node ./removeOldBuild.js && npx tsc --project \"./tsconfig.json\"",
+    "prepare": "npx husky install",
 
-    "lint": "npx eslint ./test/**/*.js",
+    "clean": "npx rimraf lib/*",
+    "build": "npm run-script clean && npx tsc --project \"./tsconfig.json\"",
+
+    "lint": "npx eslint --config .eslintrc-src.js --ext .cts,.ts ./src/**/* && npx eslint --config .eslintrc-tests.js ./bin/*.js ./test/**/*.js",
     "check-requires": "npx used-deps-analyzer \"./package.json\" \"./src\" --no-dev --overkill \"fs-extra\" \"node-promfs\"",
     "check-updates": "npx check-version-modules",
-    "unit-tests": "npm run build && npx nyc --reporter=html --reporter=text mocha",
+    "unit-tests": "npm run-script build && npx nyc --reporter=html --reporter=text mocha",
 
-    "tests": "npm run-script lint && npm run check-requires && npm run-script check-updates && npm run-script unit-tests",
-    "ci": "npm run-script tests && npx nyc report --reporter=text-lcov | coveralls"
+    "tests": "npm run-script lint && npm run-script check-requires && npm run-script check-updates && npm run-script unit-tests"
 
   },
 
@@ -38,7 +40,8 @@
   "files": [
     "/batchs",
     "/bin",
-    "/lib"
+    "/lib",
+    "/public"
   ],
   "engines": {
     "node": ">=16.0.0"
@@ -46,22 +49,23 @@
 
   "dependencies": {},
   "devDependencies": {
-    "@types/node": "20.5.1",
-    "check-version-modules": "1.4.1",
-    "coveralls": "3.1.1",
-    "eslint": "8.47.0",
+    "@types/node": "20.11.0",
+    "check-version-modules": "2.0.0",
+    "colors": "1.4.0",
+    "eslint-plugin-personnallinter": "git+ssh://git@github.com/Psychopoulet/eslint-plugin-personnallinter",
     "husky": "8.0.3",
     "mocha": "10.2.0",
     "nyc": "15.1.0",
-    "typescript": "5.1.6",
-    "used-deps-analyzer": "0.1.6"
+    "typescript": "5.3.3",
+    "used-deps-analyzer": "0.1.8"
   },
   "optionalDependencies": {},
 
   "husky": {
     "hooks": {
-      "pre-commit": "npm run-script lint",
-      "pre-push": "npm run-script tests"
+        "pre-commit": "npm run-script lint",
+        "pre-push": "npm run-script unit-tests",
+        "pre-receive": "npm run-script tests"
     }
   },
   "keywords": [
