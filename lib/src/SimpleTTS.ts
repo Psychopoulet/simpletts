@@ -85,7 +85,7 @@ export default class SimpleTTS {
             (err: Error | null, _stdout: string, stderr: string): void => {
 
                 if (err) {
-                    reject(stderr ? new Error(stderr): err);
+                    reject(stderr ? new Error(stderr) : err);
                 }
                 else {
 
@@ -187,9 +187,9 @@ export default class SimpleTTS {
 
                     return this._forceStop ? options : Promise.resolve().then((): string[] => {
 
-                        const args: string[] = IS_SAPI ?
-                            readOptionsToSAPIArgs(options) :
-                            readOptionsToEspeakArgs(options);
+                        const args: string[] = IS_SAPI
+                            ? readOptionsToSAPIArgs(options)
+                            : readOptionsToEspeakArgs(options);
 
                         args.push(options.text);
 
@@ -199,15 +199,15 @@ export default class SimpleTTS {
 
                         return new Promise((resolve: (opts: iOptions) => void, reject: (err: Error) => void): void => {
 
-                            this._reader = IS_SAPI ?
-                                spawn("cscript", CSCRIPT_ARGS.concat([ join(this._scriptsDirectory, "playtext.vbs") ]).concat(args)) :
-                                spawn("espeak", args);
+                            this._reader = IS_SAPI
+                                ? spawn("cscript", CSCRIPT_ARGS.concat([ join(this._scriptsDirectory, "playtext.vbs") ]).concat(args))
+                                : spawn("espeak", args);
 
                             let err: string = "";
 
                             if (this._reader.stderr) {
 
-                                this._reader.stderr.on("data", (data): void => {
+                                this._reader.stderr.on("data", (data: Buffer): void => {
                                     err += "string" === typeof data ? data : data.toString("ascii");
                                 });
 

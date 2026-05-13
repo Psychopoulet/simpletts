@@ -7,12 +7,12 @@
         "Age/Gender": "M" | "F" | "-";
         "VoiceName": string;
         "File": string;
-        "Other Languages": Array<string>;
+        "Other Languages": string[];
     }
 
 // module
 
-export default function parseVoicesEspeak (voices: Array<string>): Array<iESpeakVoice> {
+export default function parseVoicesEspeak (voices: string[]): iESpeakVoice[] {
 
     const PTY_LENGTH = 4;
     const LANGUAGE_LENGTH = 15;
@@ -33,7 +33,7 @@ export default function parseVoicesEspeak (voices: Array<string>): Array<iESpeak
             "Other Languages": voice.slice(PTY_LENGTH + LANGUAGE_LENGTH + AGE_GENDER_LENGTH + VOICENAME_LENGTH + FILE_LENGTH, voice.length).split("(").map((other: string): string => {
                 return other.trim().replace("(", "").replace(")", "");
             }).filter((other: string): boolean => {
-                return !!other.length;
+                return 0 < other.length;
             })
         };
 

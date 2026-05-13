@@ -1,308 +1,305 @@
-
-"use strict";
-
 // deps
 
-	// natives
-	const { strictEqual } = require("node:assert");
-	const { join } = require("node:path");
-	const { platform } = require("node:os");
+    // natives
+    const { strictEqual } = require("node:assert");
+    const { join } = require("node:path");
+    const { platform } = require("node:os");
 
-	// locals
-	const SimpleTTS = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
+    // locals
+    const SimpleTTS = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
 
 // consts
 
-	const IS_WINDOWS = "win32" === platform().trim().toLowerCase();
-	const MAX_TIMEOUT = 10000;
+    const IS_WINDOWS = "win32" === platform().trim().toLowerCase();
+    const MAX_TIMEOUT = 10000;
 
 // tests
 
 describe("read", () => {
 
-	const tts = new SimpleTTS();
+    const tts = new SimpleTTS();
 
-	let voice = null;
+    let voice = null;
 
-	it("should test missing options", (done) => {
+    it("should test missing options", (done) => {
 
-		tts.read().then(() => {
-			done(new Error("Does not generate an error"));
-		}).catch((err) => {
+        tts.read().then(() => {
+            done(new Error("Does not generate an error"));
+        }).catch((err) => {
 
-			strictEqual(typeof err, "object", "This is not an object");
-			strictEqual(err instanceof ReferenceError, true, "This is not a valid error");
+            strictEqual(typeof err, "object", "This is not an object");
+            strictEqual(err instanceof ReferenceError, true, "This is not a valid error");
 
-			done();
+            done();
 
-		});
+        });
 
-	});
+    });
 
-	it("should test wrong options", (done) => {
+    it("should test wrong options", (done) => {
 
-		tts.read(false).then(() => {
-			done(new Error("Does not generate an error"));
-		}).catch((err) => {
+        tts.read(false).then(() => {
+            done(new Error("Does not generate an error"));
+        }).catch((err) => {
 
-			strictEqual(typeof err, "object", "This is not an object");
-			strictEqual(err instanceof TypeError, true, "This is not a valid error");
+            strictEqual(typeof err, "object", "This is not an object");
+            strictEqual(err instanceof TypeError, true, "This is not a valid error");
 
-			done();
+            done();
 
-		});
+        });
 
-	});
+    });
 
-	it("should test missing text", (done) => {
+    it("should test missing text", (done) => {
 
-		tts.read({ "test": "test" }).then(() => {
-			done(new Error("Does not generate an error"));
-		}).catch((err) => {
+        tts.read({ "test": "test" }).then(() => {
+            done(new Error("Does not generate an error"));
+        }).catch((err) => {
 
-			strictEqual(typeof err, "object", "This is not an object");
-			strictEqual(err instanceof ReferenceError, true, "This is not a valid error");
+            strictEqual(typeof err, "object", "This is not an object");
+            strictEqual(err instanceof ReferenceError, true, "This is not a valid error");
 
-			done();
+            done();
 
-		});
+        });
 
-	});
+    });
 
-	it("should test wrong text", (done) => {
+    it("should test wrong text", (done) => {
 
-		tts.read({ "text": false }).then(() => {
-			done(new Error("Does not generate an error"));
-		}).catch((err) => {
+        tts.read({ "text": false }).then(() => {
+            done(new Error("Does not generate an error"));
+        }).catch((err) => {
 
-			strictEqual(typeof err, "object", "This is not an object");
-			strictEqual(err instanceof TypeError, true, "This is not a valid error");
+            strictEqual(typeof err, "object", "This is not an object");
+            strictEqual(err instanceof TypeError, true, "This is not a valid error");
 
-			done();
+            done();
 
-		});
+        });
 
-	});
+    });
 
-	it("should test empty text", (done) => {
+    it("should test empty text", (done) => {
 
-		tts.read({ "text": "" }).then(() => {
-			done(new Error("Does not generate an error"));
-		}).catch((err) => {
+        tts.read({ "text": "" }).then(() => {
+            done(new Error("Does not generate an error"));
+        }).catch((err) => {
 
-			strictEqual(typeof err, "object", "This is not an object");
-			strictEqual(err instanceof Error, true, "This is not a valid error");
+            strictEqual(typeof err, "object", "This is not an object");
+            strictEqual(err instanceof Error, true, "This is not a valid error");
 
-			done();
+            done();
 
-		});
+        });
 
-	});
+    });
 
-	it("should set default voice", () => {
-		tts.defaultVoice = null;
-	});
+    it("should set default voice", () => {
+        tts.defaultVoice = null;
+    });
 
-	it("should play a text without options", () => {
+    it("should play a text without options", () => {
 
-		return tts.read("test").then((options) => {
+        return tts.read("test").then((options) => {
 
-			strictEqual(typeof options, "object", "This is not an object");
-			strictEqual(typeof options.text, "string", "This is not a valid option");
-				strictEqual(options.text, "test", "This is not the wanted option");
-			strictEqual(typeof options.voice, "object", "This is not a valid option");
-				strictEqual(typeof options.voice.gender, "string", "This is not a valid option");
-				strictEqual(typeof options.voice.name, "string", "This is not a valid option");
-			strictEqual(typeof options.volume, "number", "This is not a valid option");
-				strictEqual(options.volume, 100, "This is not the wanted option");
-			strictEqual(typeof options.speed, "number", "This is not a valid option");
-				strictEqual(options.speed, 50, "This is not the wanted option");
+            strictEqual(typeof options, "object", "This is not an object");
+            strictEqual(typeof options.text, "string", "This is not a valid option");
+                strictEqual(options.text, "test", "This is not the wanted option");
+            strictEqual(typeof options.voice, "object", "This is not a valid option");
+                strictEqual(typeof options.voice.gender, "string", "This is not a valid option");
+                strictEqual(typeof options.voice.name, "string", "This is not a valid option");
+            strictEqual(typeof options.volume, "number", "This is not a valid option");
+                strictEqual(options.volume, 100, "This is not the wanted option");
+            strictEqual(typeof options.speed, "number", "This is not a valid option");
+                strictEqual(options.speed, 50, "This is not the wanted option");
 
-			return Promise.resolve();
+            return Promise.resolve();
 
-		});
-
-	}).timeout(MAX_TIMEOUT);
-
-	it("should play a text with options", () => {
-
-		return tts.getVoices().then((voices) => {
-
-			voice = voices.shift();
-
-			return tts.read({
-				voice,
-				"volume": 30,
-				"speed": 70,
-				"text": "test"
-			}).then((options) => {
+        });
+
+    }).timeout(MAX_TIMEOUT);
+
+    it("should play a text with options", () => {
+
+        return tts.getVoices().then((voices) => {
+
+            voice = voices.shift();
+
+            return tts.read({
+                voice,
+                "volume": 30,
+                "speed": 70,
+                "text": "test"
+            }).then((options) => {
 
-				strictEqual(typeof options, "object", "This is not an object");
-				strictEqual(typeof options.text, "string", "This is not a valid option");
-					strictEqual(options.text, "test", "This is not the wanted option");
-				strictEqual(typeof options.voice, "object", "This is not a valid option");
-					strictEqual(typeof options.voice.gender, "string", "This is not a valid option");
-						strictEqual(options.voice.gender, voice.gender, "This is not the wanted option");
-					strictEqual(typeof options.voice.name, "string", "This is not a valid option");
-						strictEqual(options.voice.name, voice.name, "This is not the wanted option");
-				strictEqual(typeof options.volume, "number", "This is not a valid option");
-					strictEqual(options.volume, 30, "This is not the wanted option");
-				strictEqual(typeof options.speed, "number", "This is not a valid option");
-					strictEqual(options.speed, 70, "This is not the wanted option");
+                strictEqual(typeof options, "object", "This is not an object");
+                strictEqual(typeof options.text, "string", "This is not a valid option");
+                    strictEqual(options.text, "test", "This is not the wanted option");
+                strictEqual(typeof options.voice, "object", "This is not a valid option");
+                    strictEqual(typeof options.voice.gender, "string", "This is not a valid option");
+                        strictEqual(options.voice.gender, voice.gender, "This is not the wanted option");
+                    strictEqual(typeof options.voice.name, "string", "This is not a valid option");
+                        strictEqual(options.voice.name, voice.name, "This is not the wanted option");
+                strictEqual(typeof options.volume, "number", "This is not a valid option");
+                    strictEqual(options.volume, 30, "This is not the wanted option");
+                strictEqual(typeof options.speed, "number", "This is not a valid option");
+                    strictEqual(options.speed, 70, "This is not the wanted option");
 
-				return Promise.resolve();
+                return Promise.resolve();
 
-			});
+            });
 
-		});
+        });
 
-	}).timeout(MAX_TIMEOUT);
+    }).timeout(MAX_TIMEOUT);
 
-	it("should play a text with voice name option", () => {
+    it("should play a text with voice name option", () => {
 
-		return tts.read({
-			"voice": voice.name,
-			"text": "test"
-		}).then((options) => {
+        return tts.read({
+            "voice": voice.name,
+            "text": "test"
+        }).then((options) => {
 
-			strictEqual(typeof options, "object", "This is not an object");
-			strictEqual(typeof options.text, "string", "This is not a valid option");
-				strictEqual(options.text, "test", "This is not the wanted option");
-			strictEqual(typeof options.voice, "string", "This is not a valid option");
-				strictEqual(options.voice, voice.name, "This is not the wanted option");
-			strictEqual(typeof options.volume, "number", "This is not a valid option");
-				strictEqual(options.volume, 100, "This is not the wanted option");
-			strictEqual(typeof options.speed, "number", "This is not a valid option");
-				strictEqual(options.speed, 50, "This is not the wanted option");
+            strictEqual(typeof options, "object", "This is not an object");
+            strictEqual(typeof options.text, "string", "This is not a valid option");
+                strictEqual(options.text, "test", "This is not the wanted option");
+            strictEqual(typeof options.voice, "string", "This is not a valid option");
+                strictEqual(options.voice, voice.name, "This is not the wanted option");
+            strictEqual(typeof options.volume, "number", "This is not a valid option");
+                strictEqual(options.volume, 100, "This is not the wanted option");
+            strictEqual(typeof options.speed, "number", "This is not a valid option");
+                strictEqual(options.speed, 50, "This is not the wanted option");
 
-			return Promise.resolve();
+            return Promise.resolve();
 
-		});
+        });
 
-	}).timeout(MAX_TIMEOUT);
+    }).timeout(MAX_TIMEOUT);
 
-	it("should play a text with too low volume & speed", () => {
+    it("should play a text with too low volume & speed", () => {
 
-		return tts.read({
-			"volume": -20,
-			"speed": -20,
-			"text": "test"
-		}).then((options) => {
+        return tts.read({
+            "volume": -20,
+            "speed": -20,
+            "text": "test"
+        }).then((options) => {
 
-			strictEqual(typeof options, "object", "This is not an object");
-			strictEqual(typeof options.text, "string", "This is not a valid option");
-				strictEqual(options.text, "test", "This is not the wanted option");
-			strictEqual(typeof options.voice, "object", "This is not a valid option");
-				strictEqual(typeof options.voice.gender, "string", "This is not a valid option");
-					strictEqual(options.voice.gender, voice.gender, "This is not the wanted option");
-				strictEqual(typeof options.voice.name, "string", "This is not a valid option");
-					strictEqual(options.voice.name, voice.name, "This is not the wanted option");
-			strictEqual(typeof options.volume, "number", "This is not a valid option");
-				strictEqual(options.volume, 0, "This is not the wanted option");
-			strictEqual(typeof options.speed, "number", "This is not a valid option");
-				strictEqual(options.speed, 0, "This is not the wanted option");
+            strictEqual(typeof options, "object", "This is not an object");
+            strictEqual(typeof options.text, "string", "This is not a valid option");
+                strictEqual(options.text, "test", "This is not the wanted option");
+            strictEqual(typeof options.voice, "object", "This is not a valid option");
+                strictEqual(typeof options.voice.gender, "string", "This is not a valid option");
+                    strictEqual(options.voice.gender, voice.gender, "This is not the wanted option");
+                strictEqual(typeof options.voice.name, "string", "This is not a valid option");
+                    strictEqual(options.voice.name, voice.name, "This is not the wanted option");
+            strictEqual(typeof options.volume, "number", "This is not a valid option");
+                strictEqual(options.volume, 0, "This is not the wanted option");
+            strictEqual(typeof options.speed, "number", "This is not a valid option");
+                strictEqual(options.speed, 0, "This is not the wanted option");
 
-			return Promise.resolve();
+            return Promise.resolve();
 
-		});
+        });
 
-	}).timeout(MAX_TIMEOUT);
+    }).timeout(MAX_TIMEOUT);
 
-	it("should play a text with too high volume & speed", () => {
+    it("should play a text with too high volume & speed", () => {
 
-		return tts.read({
-			"volume": 120,
-			"speed": 120,
-			"text": "test"
-		}).then((options) => {
+        return tts.read({
+            "volume": 120,
+            "speed": 120,
+            "text": "test"
+        }).then((options) => {
 
-			strictEqual(typeof options, "object", "This is not an object");
-			strictEqual(typeof options.text, "string", "This is not a valid option");
-				strictEqual(options.text, "test", "This is not the wanted option");
-			strictEqual(typeof options.voice, "object", "This is not a valid option");
-				strictEqual(typeof options.voice.gender, "string", "This is not a valid option");
-					strictEqual(options.voice.gender, voice.gender, "This is not the wanted option");
-				strictEqual(typeof options.voice.name, "string", "This is not a valid option");
-					strictEqual(options.voice.name, voice.name, "This is not the wanted option");
-			strictEqual(typeof options.volume, "number", "This is not a valid option");
-				strictEqual(options.volume, 100, "This is not the wanted option");
-			strictEqual(typeof options.speed, "number", "This is not a valid option");
-				strictEqual(options.speed, 100, "This is not the wanted option");
+            strictEqual(typeof options, "object", "This is not an object");
+            strictEqual(typeof options.text, "string", "This is not a valid option");
+                strictEqual(options.text, "test", "This is not the wanted option");
+            strictEqual(typeof options.voice, "object", "This is not a valid option");
+                strictEqual(typeof options.voice.gender, "string", "This is not a valid option");
+                    strictEqual(options.voice.gender, voice.gender, "This is not the wanted option");
+                strictEqual(typeof options.voice.name, "string", "This is not a valid option");
+                    strictEqual(options.voice.name, voice.name, "This is not the wanted option");
+            strictEqual(typeof options.volume, "number", "This is not a valid option");
+                strictEqual(options.volume, 100, "This is not the wanted option");
+            strictEqual(typeof options.speed, "number", "This is not a valid option");
+                strictEqual(options.speed, 100, "This is not the wanted option");
 
-			return Promise.resolve();
+            return Promise.resolve();
 
-		});
+        });
 
-	}).timeout(MAX_TIMEOUT);
+    }).timeout(MAX_TIMEOUT);
 
-	it("should play multiple reads", (done) => {
+    it("should play multiple reads", (done) => {
 
-		let timeout = null;
-		let error = false;
+        let timeout = null;
+        let error = false;
 
-		tts.read("this is a test running").then(() => {
+        tts.read("this is a test running").then(() => {
 
-			if (timeout) {
-				clearTimeout(timeout);
-				timeout = null;
-			}
+            if (timeout) {
+                clearTimeout(timeout);
+                timeout = null;
+            }
 
-			if (!error) {
-				done();
-			}
+            if (!error) {
+                done();
+            }
 
-		}).catch(done);
+        }).catch(done);
 
-		timeout = setTimeout(() => {
+        timeout = setTimeout(() => {
 
-			tts.read("test").then(() => {
-				error = true;
-				done(new Error("Does not generate an error"));
-			}).catch((err) => {
+            tts.read("test").then(() => {
+                error = true;
+                done(new Error("Does not generate an error"));
+            }).catch((err) => {
 
-				strictEqual(typeof err, "object", "This is not an object");
-				strictEqual(err instanceof Error, true, "This is not a valid error");
+                strictEqual(typeof err, "object", "This is not an object");
+                strictEqual(err instanceof Error, true, "This is not a valid error");
 
-			}).catch(() => {
-				error = true;
-			});
+            }).catch(() => {
+                error = true;
+            });
 
-		}, 200);
+        }, 200);
 
-	}).timeout(MAX_TIMEOUT);
+    }).timeout(MAX_TIMEOUT);
 
-	if (IS_WINDOWS) {
+    if (IS_WINDOWS) {
 
-		it("should test force espeak", () => {
+        it("should test force espeak", () => {
 
-			tts.forceEspeak = true;
-			tts.defaultVoice = null;
+            tts.forceEspeak = true;
+            tts.defaultVoice = null;
 
-			return tts.getVoices().then((voices) => {
+            return tts.getVoices().then((voices) => {
 
-				voice = voices.shift();
+                voice = voices.shift();
 
-				return tts.read({
-					"volume": 120,
-					"speed": 120,
-					"text": "test"
-				});
+                return tts.read({
+                    "volume": 120,
+                    "speed": 120,
+                    "text": "test"
+                });
 
-			});
+            });
 
-		});
+        });
 
-		it("should play a text with voice name option", () => {
+        it("should play a text with voice name option", () => {
 
-			return tts.read({
-				"voice": voice.name,
-				"text": "test"
-			}).catch((err) => {
-				(0, console).log(err); return Promise.reject(err);
-			});
+            return tts.read({
+                "voice": voice.name,
+                "text": "test"
+            }).catch((err) => {
+                (0, console).log(err); return Promise.reject(err);
+            });
 
-		}).timeout(MAX_TIMEOUT);
+        }).timeout(MAX_TIMEOUT);
 
-	}
+    }
 
 });

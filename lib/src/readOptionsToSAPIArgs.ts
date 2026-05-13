@@ -5,7 +5,7 @@
 
 // module
 
-export default (options: iOptions): Array<string> => {
+export default (options: iOptions): string[] => {
 
     return [
 
