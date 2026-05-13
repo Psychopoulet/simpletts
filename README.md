@@ -1,12 +1,17 @@
 # simpletts
 A basic tss manager, based on Microsoft Speech API or espeak for others OS.
 
-[![Build status](https://api.travis-ci.org/Psychopoulet/simpletts.svg?branch=master)](https://travis-ci.org/Psychopoulet/simpletts)
-[![Coverage status](https://coveralls.io/repos/github/Psychopoulet/simpletts/badge.svg?branch=master)](https://coveralls.io/github/Psychopoulet/simpletts)
-[![Dependency status](https://david-dm.org/Psychopoulet/simpletts/status.svg)](https://david-dm.org/Psychopoulet/simpletts)
-[![Dev dependency status](https://david-dm.org/Psychopoulet/simpletts/dev-status.svg)](https://david-dm.org/Psychopoulet/simpletts?type=dev)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=Psychopoulet_simpletts&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=Psychopoulet_simpletts)
 [![Issues](https://img.shields.io/github/issues/Psychopoulet/simpletts.svg)](https://github.com/Psychopoulet/simpletts/issues)
 [![Pull requests](https://img.shields.io/github/issues-pr/Psychopoulet/simpletts.svg)](https://github.com/Psychopoulet/simpletts/pulls)
+
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=Psychopoulet_simpletts&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=Psychopoulet_simpletts)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=Psychopoulet_simpletts&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=Psychopoulet_simpletts)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Psychopoulet_simpletts&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=Psychopoulet_simpletts)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Psychopoulet_simpletts&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=Psychopoulet_simpletts)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Psychopoulet_simpletts&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Psychopoulet_simpletts)
+
+[![Known Vulnerabilities](https://snyk.io/test/github/Psychopoulet/simpletts/badge.svg)](https://snyk.io/test/github/Psychopoulet/simpletts)
 
 ## Installation
 
