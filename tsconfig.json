@@ -1,9 +1,9 @@
 {
 	"compilerOptions": {
 
-		"target": "es6",
+		"target": "es2022",
 		"module": "commonjs",
-		
+
 		"outDir": "./lib/cjs",
 
 		"declaration": true,
@@ -17,13 +17,12 @@
 		"noImplicitReturns": true,
 		"noImplicitThis": true,
 		"noUnusedLocals": true,
-		"noUnusedParameters": true,
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true
 
 	},
 	"include": [
-		"./src/main.cts"
+		"./lib/src/main.cts"
 	],
 	"exclude": [
 		"node_modules"

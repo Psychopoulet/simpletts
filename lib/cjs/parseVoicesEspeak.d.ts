@@ -4,6 +4,6 @@ export interface iESpeakVoice {
     "Age/Gender": "M" | "F" | "-";
     "VoiceName": string;
     "File": string;
-    "Other Languages": Array<string>;
+    "Other Languages": string[];
 }
-export default function parseVoicesEspeak(voices: Array<string>): Array<iESpeakVoice>;
+export default function parseVoicesEspeak(voices: string[]): iESpeakVoice[];

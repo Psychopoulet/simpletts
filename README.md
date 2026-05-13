@@ -1,5 +1,5 @@
 # simpletts
-A basic tss manager, based on Microsoft Speech API or espeak for others OS
+A basic tss manager, based on Microsoft Speech API or espeak for others OS.
 
 [![Build status](https://api.travis-ci.org/Psychopoulet/simpletts.svg?branch=master)](https://travis-ci.org/Psychopoulet/simpletts)
 [![Coverage status](https://coveralls.io/repos/github/Psychopoulet/simpletts/badge.svg?branch=master)](https://coveralls.io/github/Psychopoulet/simpletts)

@@ -6,4 +6,4 @@ export interface iSAPIVoice {
     "Vendor": string;
     "Version": string;
 }
-export default function parseVoicesSAPI(voices: Array<string>): Array<iSAPIVoice>;
+export default function parseVoicesSAPI(voices: string[]): iSAPIVoice[];

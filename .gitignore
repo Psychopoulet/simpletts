@@ -1,5 +1,5 @@
 .nyc_output/
-coverage/
-node_modules/
 package-lock.json
-tests/typescript/compilation.js
+coverage/
+lib/cjs/
+node_modules/
