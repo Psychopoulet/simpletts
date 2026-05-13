@@ -93,7 +93,7 @@ $ npx run-script simpletts "This is a test"
 ### Typescript
 
 ```typescript
-import SimpleTTS = require("simpletts");
+import SimpleTTS from "simpletts";
 
 interface Voice {
 	name: string;
