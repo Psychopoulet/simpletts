@@ -8,7 +8,7 @@
         "VoiceName": string;
         "File": string;
         "Other Languages": Array<string>;
-    };
+    }
 
 // module
 
@@ -39,4 +39,4 @@ export default function parseVoicesEspeak (voices: Array<string>): Array<iESpeak
 
     });
 
-};
+}

@@ -6,34 +6,36 @@
     import { exec, spawn } from "node:child_process";
 
     // locals
-    import parseVoicesEspeak, { iESpeakVoice } from "./parseVoicesEspeak";
-    import parseVoicesSAPI, { iSAPIVoice } from "./parseVoicesSAPI";
+    import parseVoicesEspeak from "./parseVoicesEspeak";
+    import parseVoicesSAPI from "./parseVoicesSAPI";
     import readOptionsToEspeakArgs from "./readOptionsToEspeakArgs";
     import readOptionsToSAPIArgs from "./readOptionsToSAPIArgs";
 
 // types & interfaces
 
     // natives
-    import { ChildProcess } from "node:child_process";
+    import type { ChildProcess } from "node:child_process";
 
     // locals
+    import type { iESpeakVoice } from "./parseVoicesEspeak";
+    import type { iSAPIVoice } from "./parseVoicesSAPI";
 
     export interface iVoice {
-        name: string;
-        gender: "female" | "male";
-    };
+        "name": string;
+        "gender": "female" | "male";
+    }
 
     export interface iOptions {
-        text: string;
-        volume?: number;
-        speed?: number;
-        voice?: iVoice | string;
-    };
+        "text": string;
+        "volume"?: number;
+        "speed"?: number;
+        "voice"?: iVoice | string;
+    }
 
 // consts
 
     const IS_WINDOWS: boolean = "win32" === platform().trim().toLowerCase();
-    const CSCRIPT_ARGS: Array<string> = [ "//NoLogo", "//B" ];
+    const CSCRIPT_ARGS: string[] = [ "//NoLogo", "//B" ];
 
 // module
 
@@ -46,7 +48,7 @@ export default class SimpleTTS {
         private _forceStop: boolean;
         private _readPromise: Promise<iOptions> | null;
         private _reader: ChildProcess | null;
-        private _scriptsDirectory: string;
+        private readonly _scriptsDirectory: string;
 
         // public
 
@@ -71,15 +73,15 @@ export default class SimpleTTS {
         return IS_WINDOWS && !this.forceEspeak ? "sapi" : "espeak";
     }
 
-    public getVoices (): Promise<Array<iVoice>> {
+    public getVoices (): Promise<iVoice[]> {
 
         const IS_SAPI: boolean = "sapi" === this.getTTSSystem();
 
-        return new Promise((resolve: (voices: Array<iVoice>) => void, reject: (err: Error) => void): void => {
+        return new Promise((resolve: (voices: iVoice[]) => void, reject: (err: Error) => void): void => {
 
-            exec(IS_SAPI ?
-                "cscript " + CSCRIPT_ARGS.join(" ") + " \"" + join(this._scriptsDirectory, "listvoices.vbs") + "\"" :
-                "espeak --voices",
+            exec(IS_SAPI
+                ? "cscript " + CSCRIPT_ARGS.join(" ") + " \"" + join(this._scriptsDirectory, "listvoices.vbs") + "\""
+                : "espeak --voices",
             (err: Error | null, _stdout: string, stderr: string): void => {
 
                 if (err) {
@@ -87,7 +89,7 @@ export default class SimpleTTS {
                 }
                 else {
 
-                    const lines: Array<string> = _stdout.trim().replace(/\r/g, "\n").replace(/\n\n/g, "\n").split("\n");
+                    const lines: string[] = _stdout.trim().replace(/\r/g, "\n").replace(/\n\n/g, "\n").split("\n");
 
                     if (IS_SAPI) {
 
@@ -126,7 +128,7 @@ export default class SimpleTTS {
         return null !== this._reader;
     }
 
-    public read(_options: iOptions | string): Promise<iOptions> {
+    public read (_options: iOptions | string): Promise<iOptions> {
 
         this._forceStop = false;
 
@@ -162,15 +164,12 @@ export default class SimpleTTS {
                 this._readPromise = Promise.resolve().then((): Promise<void> | void => {
 
                     if (this.defaultVoice) {
-                        return;
+                        return Promise.resolve();
                     }
-                    else {
 
-                        return this.getVoices().then((voices: Array<iVoice>): void => {
-                            this.defaultVoice = voices.length ? voices[0] : null;
-                        });
-
-                    }
+                    return this.getVoices().then((voices: iVoice[]): void => {
+                        this.defaultVoice = voices.length ? voices[0] : null;
+                    });
 
                 }).then((): Promise<iOptions> | iOptions => {
 
@@ -186,9 +185,9 @@ export default class SimpleTTS {
                         options.speed = 0 > options.speed ? 0 : options.speed;
                         options.speed = 100 < options.speed ? 100 : options.speed;
 
-                    return this._forceStop ? options : Promise.resolve().then((): Array<string> => {
+                    return this._forceStop ? options : Promise.resolve().then((): string[] => {
 
-                        const args: Array<string> = IS_SAPI ?
+                        const args: string[] = IS_SAPI ?
                             readOptionsToSAPIArgs(options) :
                             readOptionsToEspeakArgs(options);
 
@@ -196,7 +195,7 @@ export default class SimpleTTS {
 
                         return args;
 
-                    }).then((args: Array<string>) => {
+                    }).then((args: string[]) => {
 
                         return new Promise((resolve: (opts: iOptions) => void, reject: (err: Error) => void): void => {
 
@@ -246,7 +245,7 @@ export default class SimpleTTS {
 
     }
 
-    public stopReading(): Promise<void> {
+    public stopReading (): Promise<void> {
 
         if (this._reader) {
 
@@ -271,4 +270,4 @@ export default class SimpleTTS {
 
     }
 
-};
+}
