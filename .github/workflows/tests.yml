@@ -67,6 +67,9 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: Install espeak
+        run: sudo apt install -y espeak
+
       - name: Install dependencies
         run: npm install
 
