@@ -10,5 +10,5 @@ module.exports = defineConfig({
     "plugins": {
         personnallinter
     },
-    "extends": [ personnallinter.configs["js-back"] ]
+    "extends": [ personnallinter.configs["ts-back"] ]
 });

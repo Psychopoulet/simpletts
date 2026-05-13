@@ -2,12 +2,12 @@
 
   "name": "simpletts",
   "version": "2.6.0",
-  "description": "A basic TTS manager",
+  "description": "A basic tss manager, based on Microsoft Speech API or espeak for others OS.",
 
   "type": "commonjs",
   "typings": "./lib/cjs/main.d.cts",
-  "main": "./lib/cjs/main.cjs",
 
+  "main": "./lib/cjs/main.cjs",
   "exports": {
     ".": {
       "require": {
@@ -19,17 +19,24 @@
 
   "scripts": {
 
-    "prepare": "npx husky install",
+    "prepare": "npx husky || true",
 
-    "clean": "npx rimraf lib",
-    "build": "npm run-script clean && npx tsc --project \"./tsconfig.json\"",
+    "lint-back": "npx eslint --config .eslintrc-back.js --ext .ts,.cts,.mts ./lib/src/**/*",
+    "lint-tests": "npx eslint --config .eslintrc-tests.js --ext .js,.cjs,.mjs ./test/**/*",
+    "lint": "npm run lint-back && npm run lint-tests",
 
-    "lint": "npx eslint --config .eslintrc-src.js --ext .cts,.ts ./src/**/* && npx eslint --config .eslintrc-tests.js ./bin/*.js ./test/**/*.js",
-    "check-requires": "npx used-deps-analyzer \"./package.json\" \"./src\" --no-dev --overkill \"fs-extra\" \"node-promfs\"",
-    "check-updates": "npx check-version-modules",
-    "unit-tests": "npm run-script build && npx nyc --reporter=html --reporter=text mocha",
+    "clean-back": "npx rimraf ./lib/cjs",
+    "clean": "npm run clean-back",
 
-    "tests": "npm run-script lint && npm run-script check-requires && npm run-script check-updates && npm run-script unit-tests"
+    "build-back": "npm run clean-back && npx tsc --project ./tsconfig.json",
+    "build": "npm run build-back",
+
+    "check-requires": "npx used-deps-analyzer ./package.json ./lib/src --no-dev",
+    "check-updates": "npx check-version-modules --no-fail-at-major --fail-at-minor --fail-at-patch",
+    "unit-tests": "npx mocha",
+    "unit-tests-local": "npx nyc --reporter=html --reporter=text mocha",
+
+    "tests": "npm run lint && npm run check-requires && npm run check-updates && npm run build && npm run unit-tests-local"
 
   },
 
@@ -40,33 +47,31 @@
   "files": [
     "/batchs",
     "/bin",
-    "/lib",
-    "/public"
+    "/lib"
   ],
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=22.22.0"
   },
 
   "dependencies": {},
   "devDependencies": {
-    "@types/node": "20.11.0",
-    "check-version-modules": "2.0.0",
+    "@types/node": "25.6.0",
+    "check-version-modules": "2.4.0",
     "colors": "1.4.0",
     "eslint-plugin-personnallinter": "git+ssh://git@github.com/Psychopoulet/eslint-plugin-personnallinter",
-    "husky": "8.0.3",
-    "mocha": "10.2.0",
-    "nyc": "15.1.0",
-    "rimraf": "5.0.5",
-    "typescript": "5.3.3",
-    "used-deps-analyzer": "0.1.8"
+    "husky": "9.1.7",
+    "mocha": "11.7.5",
+    "nyc": "18.0.0",
+    "rimraf": "6.1.3",
+    "typescript": "5.9.3",
+    "used-deps-analyzer": "0.3.0"
   },
   "optionalDependencies": {},
 
   "husky": {
     "hooks": {
-        "pre-commit": "npm run-script lint",
-        "pre-push": "npm run-script unit-tests",
-        "pre-receive": "npm run-script tests"
+      "pre-commit": "npm run lint",
+      "pre-push": "npm run build && npm run unit-tests-local"
     }
   },
   "keywords": [

@@ -1,0 +1,131 @@
+# Publish / version tagging — structure aligned with tests.yml
+# Creates refs/tags/<name> only when that tag is absent on origin (git ls-remote).
+# publish-npm runs only when that job actually created and pushed a new tag.
+
+# ══════════════════════════════════════════════════════════════════════════════
+# METADATA
+# ══════════════════════════════════════════════════════════════════════════════
+
+name: Publish                               # Display name in the GitHub UI
+run-name: Publish ${{ github.sha }}         # Dynamic run name
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false                 # Do not abort mid tag/push on rapid merges
+
+# ══════════════════════════════════════════════════════════════════════════════
+# WHEN? (Trigger events)
+# ══════════════════════════════════════════════════════════════════════════════
+
+on:
+  push:
+    branches: [ master ]                    # After merge (push to master)
+  workflow_dispatch:                        # Manual trigger in the UI
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SECURITY (Permissions)
+# ══════════════════════════════════════════════════════════════════════════════
+
+permissions:
+  contents: read                            # Read repository contents (least privilege)
+
+# ══════════════════════════════════════════════════════════════════════════════
+# GLOBAL CONFIGURATION
+# ══════════════════════════════════════════════════════════════════════════════
+
+env:
+  NODE_VERSION: '24'                        # Same as tests.yml; used by setup-node
+
+# ══════════════════════════════════════════════════════════════════════════════
+# JOBS (Work units)
+# ══════════════════════════════════════════════════════════════════════════════
+
+jobs:
+
+  publish-tag-if-new-version:
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    permissions:
+      contents: write                       # Required to create git tags (refs/tags/*)
+
+    outputs:
+      tag_created: ${{ steps.create_version_tag.outputs.tag_created }}
+
+    steps:
+
+      - name: Ensure steps to avoid vulnerabilities
+        uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e # curl -s https://api.github.com/repos/step-security/harden-runner/commits/v2.14.2 | jq -r .sha
+        with:
+          egress-policy: audit
+
+      - name: Setup the repo
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # curl -s https://api.github.com/repos/actions/checkout/commits/v6.0.2 | jq -r .sha
+        with:
+          fetch-depth: 0                    # gitleaks uses a git rev range (e.g. push before..after); depth 1 often misses those commits
+          fetch-tags: true                  # so local checks stay consistent; ls-remote still authoritative
+
+      - name: Scan for secrets leaks
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # curl -s https://api.github.com/repos/gitleaks/gitleaks-action/commits/v2.3.9 | jq -r .sha
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup NodeJS v${{ env.NODE_VERSION }}
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # curl -s https://api.github.com/repos/actions/setup-node/commits/v6.3.0 | jq -r .sha
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Create version tag if missing on github
+        id: create_version_tag
+        run: |
+          set -euo pipefail
+          VERSION="$(node -p "require('./package.json').version")"
+          if [ -z "${VERSION}" ]; then
+            echo "::error::package.json is missing a non-empty \"version\" field"
+            exit 1
+          fi
+          if git ls-remote --tags origin "refs/tags/${VERSION}" | grep -q .; then
+            echo "Tag ${VERSION} already exists on origin — skipping."
+            echo "tag_created=false" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "${VERSION}" -m "Release ${VERSION}" "${GITHUB_SHA}"
+          git push origin "refs/tags/${VERSION}"
+          echo "tag_created=true" >> "${GITHUB_OUTPUT}"
+
+  publish-npm:
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    needs: publish-tag-if-new-version
+    if: needs.publish-tag-if-new-version.outputs.tag_created == 'true'
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+
+      - name: Setup the repo
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # curl -s https://api.github.com/repos/actions/checkout/commits/v6.0.2 | jq -r .sha
+        with:
+          fetch-depth: 0                    # gitleaks uses a git rev range (e.g. push before..after); depth 1 often misses those commits
+          fetch-tags: true                  # so local checks stay consistent; ls-remote still authoritative
+
+      - name: Setup NodeJS v${{ env.NODE_VERSION }}
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # curl -s https://api.github.com/repos/actions/setup-node/commits/v6.3.0 | jq -r .sha
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run build
+        run: npm run build
+
+      - name: Publish to npm
+        run: npm publish --provenance --access public

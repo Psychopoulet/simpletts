@@ -1,0 +1,86 @@
+# from https://blog.stephane-robert.info/docs/pipeline-cicd/github/
+# and  https://apprendre-la-programmation.net/configurer-ci-github-actions/
+
+# ══════════════════════════════════════════════════════════════════════════════
+# METADATA
+# ══════════════════════════════════════════════════════════════════════════════
+
+name: Tests                                 # Display name in the GitHub UI
+run-name: Tests for ${{ github.ref_name }}  # Dynamic run name
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true                  # Cancel in-progress workflows of the same ref
+
+# ══════════════════════════════════════════════════════════════════════════════
+# WHEN? (Trigger events)
+# ══════════════════════════════════════════════════════════════════════════════
+
+on:
+  pull_request:
+    branches: [ master ]                    # On PR targeting master
+  workflow_dispatch:                        # Manual trigger in the UI
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SECURITY (Permissions)
+# ══════════════════════════════════════════════════════════════════════════════
+
+permissions:
+  contents: read                            # Read repository contents (least privilege)
+
+# ══════════════════════════════════════════════════════════════════════════════
+# GLOBAL CONFIGURATION
+# ══════════════════════════════════════════════════════════════════════════════
+
+env:
+  NODE_VERSION: '24'                        # Available in all jobs
+
+# ══════════════════════════════════════════════════════════════════════════════
+# JOBS (Work units)
+# ══════════════════════════════════════════════════════════════════════════════
+
+jobs:
+
+  tests:
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+
+      - name: Ensure steps to avoid vulnerabilities
+        uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e # curl -s https://api.github.com/repos/step-security/harden-runner/commits/v2.14.2 | jq -r .sha
+        with:
+          egress-policy: audit
+
+      - name: Setup the repo
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # curl -s https://api.github.com/repos/actions/checkout/commits/v6.0.2 | jq -r .sha
+        with:
+          fetch-depth: 0                    # gitleaks uses a git rev range (e.g. push before..after); depth 1 often misses those commits
+
+      - name: Scan for secrets leaks
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # curl -s https://api.github.com/repos/gitleaks/gitleaks-action/commits/v2.3.9 | jq -r .sha
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup NodeJS v${{ env.NODE_VERSION }}
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # curl -s https://api.github.com/repos/actions/setup-node/commits/v6.3.0 | jq -r .sha
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run linters
+        run: npm run lint
+
+      - name: Run build
+        run: npm run build
+
+      - name: Check requires (used-deps-analyzer)
+        run: npm run check-requires
+
+      - name: Check updates (check-version-modules)
+        run: npm run check-updates
+
+      - name: Run unit tests
+        run: npm run unit-tests
