@@ -79,6 +79,9 @@ jobs:
       - name: Run build
         run: npm run build
 
+      - name: Check node engine
+        run: npm run check-node-engine
+
       - name: Check requires (used-deps-analyzer)
         run: npm run check-requires
 

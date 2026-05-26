@@ -31,12 +31,13 @@
     "build-back": "npm run clean-back && npx tsc --project ./tsconfig.json",
     "build": "npm run build-back",
 
+    "check-node-engine": "npx check-node-engine",
     "check-requires": "npx used-deps-analyzer ./package.json ./lib/src --no-dev",
     "check-updates": "npx check-version-modules --no-fail-at-major --fail-at-minor --fail-at-patch",
     "unit-tests": "npx mocha",
     "unit-tests-local": "npx nyc --reporter=html --reporter=text mocha",
 
-    "tests": "npm run lint && npm run check-requires && npm run check-updates && npm run build && npm run unit-tests-local"
+    "tests": "npm run lint && npm run check-node-engine && npm run check-requires && npm run check-updates && npm run build && npm run unit-tests-local"
 
   },
 
@@ -56,6 +57,7 @@
   "dependencies": {},
   "devDependencies": {
     "@types/node": "25.7.0",
+    "check-node-engine": "1.0.0",
     "check-version-modules": "2.4.0",
     "colors": "1.4.0",
     "eslint-plugin-personnallinter": "git+ssh://git@github.com/Psychopoulet/eslint-plugin-personnallinter",
