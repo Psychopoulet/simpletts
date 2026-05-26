@@ -19,8 +19,6 @@
 
   "scripts": {
 
-    "prepare": "npx husky || true",
-
     "lint-back": "npx eslint --config .eslintrc-back.js --ext .ts,.cts,.mts ./lib/src/**/*",
     "lint-tests": "npx eslint --config .eslintrc-tests.js --ext .js,.cjs,.mjs ./test/**/*",
     "lint": "npm run lint-back && npm run lint-tests",
@@ -68,14 +66,7 @@
     "typescript": "5.9.3",
     "used-deps-analyzer": "0.3.0"
   },
-  "optionalDependencies": {},
 
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint",
-      "pre-push": "npm run build && npm run unit-tests-local"
-    }
-  },
   "keywords": [
     "tts",
     "speech",
