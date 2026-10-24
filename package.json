@@ -35,7 +35,7 @@
     "unit-tests": "npx c8 --reporter=text-summary --all --include \"lib/src/**/*.ts\" --include \"lib/src/**/*.cts\" --extension .ts --extension .cts mocha --require ./test/register.js",
     "unit-tests-local": "npx c8 --reporter=html --reporter=text --all --include \"lib/src/**/*.ts\" --include \"lib/src/**/*.cts\" --extension .ts --extension .cts mocha --require ./test/register.js",
 
-    "tests": "npm run lint && npm run check-node-engine && npm run check-requires && npm run check-updates && npm run build && npm run unit-tests-local"
+    "tests": "npm run lint && npm run check-node-engine && npm run check-requires && npm run check-updates && npm run build && npm run unit-tests"
 
   },
 
