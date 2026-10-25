@@ -88,7 +88,41 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install espeak
-        run: sudo apt install -y espeak
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y espeak pulseaudio libasound2-plugins
+          # ubuntu-latest has no sound card; espeak exits 4 without an output device
+          runtime="${RUNNER_TEMP}/pulse"
+          mkdir -p "$runtime"
+          chmod 700 "$runtime"
+          echo "XDG_RUNTIME_DIR=$runtime" >> "$GITHUB_ENV"
+          export XDG_RUNTIME_DIR="$runtime"
+          pulseaudio --daemonize --exit-idle-time=-1
+          for _ in 1 2 3 4 5; do
+            pactl info >/dev/null 2>&1 && break
+            sleep 0.5
+          done
+          pactl load-module module-null-sink sink_name=dummy
+          pactl set-default-sink dummy
+          sudo tee /etc/asound.conf >/dev/null <<'EOF'
+          pcm.!default {
+              type pulse
+          }
+          ctl.!default {
+              type pulse
+          }
+          EOF
+          if ! espeak "test"; then
+            sudo tee /etc/asound.conf >/dev/null <<'EOF'
+          pcm.!default {
+              type null
+          }
+          ctl.!default {
+              type null
+          }
+          EOF
+            espeak "test"
+          fi
 
       - name: Install dependencies
         run: npm install
