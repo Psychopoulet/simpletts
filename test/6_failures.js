@@ -9,11 +9,11 @@
 
 // private
 
-    const _waitForReader = (tts) => {
+    function _waitForReader (tts) {
 
         const started = Date.now();
 
-        const poll = () => {
+        function poll () {
 
             if (tts._reader) {
                 return Promise.resolve();
@@ -27,11 +27,11 @@
                 setTimeout(resolve, 10);
             }).then(poll);
 
-        };
+        }
 
         return poll();
 
-    };
+    }
 
 // tests
 

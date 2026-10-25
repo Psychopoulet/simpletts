@@ -10,13 +10,13 @@
 
 // private
 
-    const _pad = (value, length) => {
+    function _pad (value, length) {
         return (value + " ".repeat(length)).slice(0, length);
-    };
+    }
 
-    const _voiceLine = (gender, name, other) => {
+    function _voiceLine (gender, name, other) {
         return _pad("5", 4) + _pad("en", 15) + _pad(gender, 3) + _pad(name, 21) + _pad("en/en-us", 14) + other;
-    };
+    }
 
 // tests
 
@@ -63,7 +63,14 @@ describe("readOptionsToEspeakArgs", () => {
             "voice": "female"
         });
 
-        deepStrictEqual(args, [ "-a", "100", "-s", "160", "-v", "female" ]);
+        deepStrictEqual(args, [
+            "-a",
+            "100",
+            "-s",
+            "160",
+            "-v",
+            "female"
+        ]);
 
     });
 
@@ -79,7 +86,14 @@ describe("readOptionsToEspeakArgs", () => {
             }
         });
 
-        deepStrictEqual(args, [ "-a", "200", "-s", "80", "-v", "male" ]);
+        deepStrictEqual(args, [
+            "-a",
+            "200",
+            "-s",
+            "80",
+            "-v",
+            "male"
+        ]);
 
     });
 
