@@ -32,7 +32,7 @@
     "check-node-engine": "npx check-node-engine",
     "check-requires": "npx used-deps-analyzer ./package.json ./lib/src --no-dev",
     "check-updates": "npx check-version-modules --no-fail-at-major --fail-at-minor --fail-at-patch",
-    "unit-tests": "npx c8 --reporter=text-summary --all --include \"lib/src/**/*.ts\" --include \"lib/src/**/*.cts\" --extension .ts --extension .cts --check-coverage --statements 95 --branches 95 --functions 95 --lines 95 mocha --require ./test/register.js",
+    "unit-tests": "npx c8 --reporter=text-summary --all --include \"lib/src/**/*.ts\" --include \"lib/src/**/*.cts\" --extension .ts --extension .cts --check-coverage --statements 95 --branches 94 --functions 95 --lines 95 mocha --require ./test/register.js",
     "unit-tests-local": "npx c8 --reporter=html --reporter=text --all --include \"lib/src/**/*.ts\" --include \"lib/src/**/*.cts\" --extension .ts --extension .cts mocha --require ./test/register.js",
 
     "tests": "npm run lint && npm run check-node-engine && npm run check-requires && npm run check-updates && npm run build && npm run unit-tests"

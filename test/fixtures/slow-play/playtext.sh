@@ -1,2 +1,0 @@
-#!/bin/bash
-exec sleep 30
