@@ -3,14 +3,9 @@
     // natives
     const { strictEqual } = require("node:assert");
     const { join } = require("node:path");
-    const { platform } = require("node:os");
 
     // locals
     const SimpleTTS = require(join(__dirname, "..", "lib", "src", "main.cts"));
-
-// consts
-
-    const IS_WINDOWS = "win32" === platform().trim().toLowerCase();
 
 // tests
 
@@ -31,16 +26,12 @@ describe("get voices", () => {
 
     });
 
-    if (IS_WINDOWS) {
+    it("should test force espeak", () => {
 
-        it("should test force espeak", () => {
+        tts.forceEspeak = true;
 
-            tts.forceEspeak = true;
+        return tts.getVoices();
 
-            return tts.getVoices();
-
-        });
-
-    }
+    });
 
 });
