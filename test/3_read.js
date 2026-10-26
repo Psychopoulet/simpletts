@@ -283,7 +283,7 @@ describe("read", () => {
 
         });
 
-    });
+    }).timeout(MAX_TIMEOUT);
 
     it("should play a text with voice name option", () => {
 

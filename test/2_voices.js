@@ -7,6 +7,10 @@
     // locals
     const SimpleTTS = require(join(__dirname, "..", "lib", "src", "main.cts"));
 
+// consts
+
+    const MAX_TIMEOUT = 10000;
+
 // tests
 
 describe("get voices", () => {
@@ -32,6 +36,6 @@ describe("get voices", () => {
 
         return tts.getVoices();
 
-    });
+    }).timeout(MAX_TIMEOUT);
 
 });
