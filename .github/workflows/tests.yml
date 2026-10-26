@@ -40,38 +40,95 @@ env:
 
 jobs:
 
-  tests:
+  require-develop-source:
 
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 1
 
     steps:
 
       - name: Ensure steps to avoid vulnerabilities
-        uses: step-security/harden-runner@ab7a9404c0f3da075243ca237b5fac12c98deaa5 # curl -s https://api.github.com/repos/step-security/harden-runner/commits/v2.19.3 | jq -r .sha
+        uses: step-security/harden-runner@ccd8616d44fd3846e67624a50d5aad6d37bf2d25 # curl -s https://api.github.com/repos/step-security/harden-runner/commits/v2.22.1 | jq -r .sha
+        with:
+          egress-policy: audit
+
+      - name: Only allow PRs from develop into master
+        run: |
+          if [ "${{ github.base_ref }}" = "master" ] && [ "${{ github.head_ref }}" != "develop" ]; then
+            echo "::error::Merges into master are only allowed from the 'develop' branch (got '${{ github.head_ref }}')."
+            exit 1
+          fi
+
+  tests:
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: require-develop-source
+
+    steps:
+
+      - name: Ensure steps to avoid vulnerabilities
+        uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # curl -s https://api.github.com/repos/step-security/harden-runner/commits/v2.22.2 | jq -r .sha
         with:
           egress-policy: audit
 
       - name: Setup the repo
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # curl -s https://api.github.com/repos/actions/checkout/commits/v6.0.2 | jq -r .sha
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # curl -s https://api.github.com/repos/actions/checkout/commits/v7.0.1 | jq -r .sha
         with:
           fetch-depth: 0                    # gitleaks uses a git rev range (e.g. push before..after); depth 1 often misses those commits
 
       - name: Scan for secrets leaks
-        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # curl -s https://api.github.com/repos/gitleaks/gitleaks-action/commits/v2.3.9 | jq -r .sha
+        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # curl -s https://api.github.com/repos/gitleaks/gitleaks-action/commits/v3.0.0 | jq -r .sha
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup NodeJS v${{ env.NODE_VERSION }}
-        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # curl -s https://api.github.com/repos/actions/setup-node/commits/v6.4.0 | jq -r .sha
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # curl -s https://api.github.com/repos/actions/setup-node/commits/v7.1.0 | jq -r .sha
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install espeak
-        run: sudo apt install -y espeak
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y espeak pulseaudio libasound2-plugins
+          # ubuntu-latest has no sound card; espeak exits 4 without an output device
+          runtime="${RUNNER_TEMP}/pulse"
+          mkdir -p "$runtime"
+          chmod 700 "$runtime"
+          echo "XDG_RUNTIME_DIR=$runtime" >> "$GITHUB_ENV"
+          export XDG_RUNTIME_DIR="$runtime"
+          pulseaudio --daemonize --exit-idle-time=-1
+          for _ in 1 2 3 4 5; do
+            pactl info >/dev/null 2>&1 && break
+            sleep 0.5
+          done
+          pactl load-module module-null-sink sink_name=dummy
+          pactl set-default-sink dummy
+          sudo tee /etc/asound.conf >/dev/null <<'EOF'
+          pcm.!default {
+              type pulse
+          }
+          ctl.!default {
+              type pulse
+          }
+          EOF
+          if ! espeak "test"; then
+            sudo tee /etc/asound.conf >/dev/null <<'EOF'
+          pcm.!default {
+              type null
+          }
+          ctl.!default {
+              type null
+          }
+          EOF
+            espeak "test"
+          fi
 
       - name: Install dependencies
         run: npm install
+
+      - name: Run audit
+        run: npm audit --omit=dev --omit=optional
 
       - name: Run linters
         run: npm run lint

@@ -3,14 +3,12 @@
     // natives
     const { strictEqual } = require("node:assert");
     const { join } = require("node:path");
-    const { platform } = require("node:os");
 
     // locals
-    const SimpleTTS = require(join(__dirname, "..", "lib", "cjs", "main.cjs"));
+    const SimpleTTS = require(join(__dirname, "..", "lib", "src", "main.cts"));
 
 // consts
 
-    const IS_WINDOWS = "win32" === platform().trim().toLowerCase();
     const MAX_TIMEOUT = 10000;
 
 // tests
@@ -268,38 +266,34 @@ describe("read", () => {
 
     }).timeout(MAX_TIMEOUT);
 
-    if (IS_WINDOWS) {
+    it("should test force espeak", () => {
 
-        it("should test force espeak", () => {
+        tts.forceEspeak = true;
+        tts.defaultVoice = null;
 
-            tts.forceEspeak = true;
-            tts.defaultVoice = null;
+        return tts.getVoices().then((voices) => {
 
-            return tts.getVoices().then((voices) => {
+            voice = voices.shift();
 
-                voice = voices.shift();
-
-                return tts.read({
-                    "volume": 120,
-                    "speed": 120,
-                    "text": "test"
-                });
-
+            return tts.read({
+                "volume": 120,
+                "speed": 120,
+                "text": "test"
             });
 
         });
 
-        it("should play a text with voice name option", () => {
+    }).timeout(MAX_TIMEOUT);
 
-            return tts.read({
-                "voice": voice.name,
-                "text": "test"
-            }).catch((err) => {
-                (0, console).log(err); return Promise.reject(err);
-            });
+    it("should play a text with voice name option", () => {
 
-        }).timeout(MAX_TIMEOUT);
+        return tts.read({
+            "voice": voice.name,
+            "text": "test"
+        }).catch((err) => {
+            (0, console).log(err); return Promise.reject(err);
+        });
 
-    }
+    }).timeout(MAX_TIMEOUT);
 
 });

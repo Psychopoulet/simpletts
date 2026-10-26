@@ -1,9 +1,10 @@
 {
 	"compilerOptions": {
 
-		"target": "es2022",
+		"target": "es2025",
 		"module": "commonjs",
 
+		"rootDir": "./lib/src",
 		"outDir": "./lib/cjs",
 
 		"declaration": true,
@@ -18,7 +19,8 @@
 		"noImplicitThis": true,
 		"noUnusedLocals": true,
 		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true
+		"forceConsistentCasingInFileNames": true,
+		"types": [ "node" ]
 
 	},
 	"include": [
