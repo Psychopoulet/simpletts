@@ -125,7 +125,7 @@ jobs:
           fi
 
       - name: Install dependencies
-        run: npm install
+        run: npm run install-dev
 
       - name: Run audit
         run: npm audit --omit=dev --omit=optional
