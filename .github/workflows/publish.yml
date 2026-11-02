@@ -122,9 +122,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
-        run: |
-          npm install
-          npm audit fix
+        run: npm run install-dev
 
       - name: Run build
         run: npm run build
